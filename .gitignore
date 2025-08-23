@@ -1,2 +1,4 @@
 *.dll
 *.so
+*__pycache__
+*.o
