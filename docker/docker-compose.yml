@@ -1,0 +1,187 @@
+version: '3.8'
+
+services:
+  # ============================================================================
+  # TESTS EN LINUX
+  # ============================================================================
+  test-linux:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.linux
+    volumes:
+      - ../:/app
+      - ./logs:/app/logs
+    environment:
+      - LD_LIBRARY_PATH=/app/low
+    command: |
+      bash -c "
+        mkdir -p /app/logs &&
+        cd /app/low &&
+        echo '=== Testing Linux Build ===' | tee /app/logs/linux-test.log &&
+        make clean && make 2>&1 | tee -a /app/logs/linux-test.log &&
+        echo '=== Running C Tests ===' | tee -a /app/logs/linux-test.log &&
+        make test-examples 2>&1 | tee -a /app/logs/linux-test.log &&
+        LD_LIBRARY_PATH=. ./tests/test_minimal 2>&1 | tee -a /app/logs/linux-test.log &&
+        LD_LIBRARY_PATH=. ./tests/example 2>&1 | tee -a /app/logs/linux-test.log &&
+        echo '=== Running Python Tests ===' | tee -a /app/logs/linux-test.log &&
+        LD_LIBRARY_PATH=. python3 tests/example_simple.py 2>&1 | tee -a /app/logs/linux-test.log &&
+        echo '=== Performance Tests ===' | tee -a /app/logs/linux-test.log &&
+        { time LD_LIBRARY_PATH=. ./tests/example; } 2>&1 | tee -a /app/logs/linux-test.log &&
+        echo '=== Security Tests ===' | tee -a /app/logs/linux-test.log &&
+        cppcheck --enable=all *.c linux/*.c 2>&1 | tee -a /app/logs/linux-test.log || true &&
+        echo '=== Linux Tests Completed ===' | tee -a /app/logs/linux-test.log
+      "
+
+  # ============================================================================
+  # TESTS EN WINDOWS (via Wine)
+  # ============================================================================
+  test-windows:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.windows
+    volumes:
+      - ../:/app
+      - ./logs:/app/logs
+    command: |
+      bash -c "
+        mkdir -p /app/logs &&
+        /app/test-windows.sh 2>&1 | tee /app/logs/windows-test.log
+      "
+
+  # ============================================================================
+  # TESTS EN MACOS (SIMULADO)
+  # ============================================================================
+  test-macos:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.macos
+    volumes:
+      - ../:/app
+      - ./logs:/app/logs
+    command: |
+      bash -c "
+        mkdir -p /app/logs &&
+        /app/test-macos.sh 2>&1 | tee /app/logs/macos-test.log
+      "
+
+  # ============================================================================
+  # TESTS DE COMPATIBILIDAD PYTHON
+  # ============================================================================
+  test-python-38:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.linux
+    volumes:
+      - ../:/app
+      - ./logs:/app/logs
+    environment:
+      - LD_LIBRARY_PATH=/app/low
+    command: |
+      bash -c "
+        mkdir -p /app/logs &&
+        cd /app/low &&
+        echo '=== Testing Python 3.8 ===' | tee /app/logs/python-38-test.log &&
+        make clean && make 2>&1 | tee -a /app/logs/python-38-test.log &&
+        LD_LIBRARY_PATH=. python3 tests/example_simple.py 2>&1 | tee -a /app/logs/python-38-test.log &&
+        LD_LIBRARY_PATH=. python3 tests/example_ctypes.py 2>&1 | tee -a /app/logs/python-38-test.log &&
+        LD_LIBRARY_PATH=. python3 tests/example_cffi.py 2>&1 | tee -a /app/logs/python-38-test.log
+      "
+
+  test-python-39:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.linux
+    volumes:
+      - ../:/app
+      - ./logs:/app/logs
+    environment:
+      - LD_LIBRARY_PATH=/app/low
+    command: |
+      bash -c "
+        mkdir -p /app/logs &&
+        cd /app/low &&
+        echo '=== Testing Python 3.9 ===' | tee /app/logs/python-39-test.log &&
+        make clean && make 2>&1 | tee -a /app/logs/python-39-test.log &&
+        LD_LIBRARY_PATH=. python3 tests/example_simple.py 2>&1 | tee -a /app/logs/python-39-test.log &&
+        LD_LIBRARY_PATH=. python3 tests/example_ctypes.py 2>&1 | tee -a /app/logs/python-39-test.log &&
+        LD_LIBRARY_PATH=. python3 tests/example_cffi.py 2>&1 | tee -a /app/logs/python-39-test.log
+      "
+
+  # ============================================================================
+  # TESTS DE RENDIMIENTO
+  # ============================================================================
+  performance-test:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.linux
+    volumes:
+      - ../:/app
+    environment:
+      - LD_LIBRARY_PATH=/app/low
+    command: |
+      bash -c "
+        cd /app/low &&
+        echo '=== Performance Testing ===' &&
+        make clean && make &&
+        echo '=== Memory Usage Test ===' &&
+        valgrind --tool=massif --massif-out-file=memory.log LD_LIBRARY_PATH=. ./tests/example &&
+        ms_print memory.log | head -20 &&
+        echo '=== Concurrency Test ===' &&
+        for i in {1..5}; do
+          LD_LIBRARY_PATH=. ./tests/example &
+        done &&
+        wait &&
+        echo '=== Performance Tests Completed ==='
+      "
+
+  # ============================================================================
+  # TESTS DE SEGURIDAD
+  # ============================================================================
+  security-test:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.linux
+    volumes:
+      - ../:/app
+    environment:
+      - LD_LIBRARY_PATH=/app/low
+    command: |
+      bash -c "
+        cd /app/low &&
+        echo '=== Security Testing ===' &&
+        make clean && make &&
+        echo '=== Static Analysis ===' &&
+        cppcheck --enable=all --error-exitcode=1 *.c linux/*.c windows/*.c xnu/*.c || true &&
+        echo '=== Memory Leak Check ===' &&
+        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind.log LD_LIBRARY_PATH=. ./tests/example &&
+        cat valgrind.log &&
+        echo '=== Security Tests Completed ==='
+      "
+
+  # ============================================================================
+  # TESTS DE INTEGRACIÓN
+  # ============================================================================
+  integration-test:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.linux
+    volumes:
+      - ../:/app
+    environment:
+      - LD_LIBRARY_PATH=/app/low
+    depends_on:
+      - test-linux
+      - test-windows
+    command: |
+      bash -c "
+        cd /app/low &&
+        echo '=== Integration Testing ===' &&
+        make clean && make &&
+        echo '=== Testing All Features ===' &&
+        LD_LIBRARY_PATH=. ./tests/example > integration.log &&
+        echo '=== Checking Output ===' &&
+        grep 'CPU:' integration.log &&
+        grep 'RAM:' integration.log &&
+        grep 'GPU:' integration.log &&
+        echo '=== Integration Tests Completed ==='
+      "

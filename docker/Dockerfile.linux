@@ -1,0 +1,33 @@
+FROM ubuntu:22.04
+
+# Instalar dependencias
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    python3 \
+    python3-pip \
+    lm-sensors \
+    smartmontools \
+    pciutils \
+    valgrind \
+    cppcheck \
+    && rm -rf /var/lib/apt/lists/*
+
+# Cargar módulos de sensores
+RUN modprobe coretemp || true && \
+    modprobe k10temp || true
+
+# Configurar directorio de trabajo
+WORKDIR /app
+
+# Copiar código fuente
+COPY . .
+
+# Compilar y testear
+RUN cd low && \
+    make clean && \
+    make && \
+    make test-examples && \
+    make run-tests
+
+# Comando por defecto
+CMD ["bash"]
