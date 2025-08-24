@@ -436,21 +436,48 @@ void get_sensors_info_xnu(SystemStatus *status)
 
 void get_motherboard_info_xnu(SystemStatus *status)
 {
-    // Obtener información del sistema
-    char model[128];
-    size_t size = sizeof(model);
-    if (sysctlbyname("hw.model", model, &size, NULL, 0) == 0)
-    {
-        strncpy(status->motherboard.model, model, sizeof(status->motherboard.model) - 1);
+    // Validar puntero nulo
+    if (!status) {
+        return;
     }
-    else
-    {
-        strcpy(status->motherboard.model, "Unknown");
-    }
-
+    
+    // Inicializar valores por defecto
     strcpy(status->motherboard.manufacturer, "Apple");
+    strcpy(status->motherboard.model, "Unknown");
     strcpy(status->motherboard.version, "Unknown");
+    strcpy(status->motherboard.serial, "Unknown");
     strcpy(status->motherboard.bios_version, "Unknown");
+    strcpy(status->motherboard.chipset, "Unknown");
+    
+    // Usar sysctl para obtener información del hardware (API centralizada de macOS)
+    char model[256];
+    size_t size = sizeof(model);
+    
+    // Modelo del hardware
+    if (sysctlbyname("hw.model", model, &size, NULL, 0) == 0) {
+        strncpy(status->motherboard.model, model, 127);
+        status->motherboard.model[127] = '\0';
+    }
+    
+    // Información adicional del sistema
+    char machine[256];
+    size = sizeof(machine);
+    if (sysctlbyname("hw.machine", machine, &size, NULL, 0) == 0) {
+        // Usar machine como versión si no tenemos otra
+        if (strcmp(status->motherboard.version, "Unknown") == 0) {
+            strncpy(status->motherboard.version, machine, 31);
+            status->motherboard.version[31] = '\0';
+        }
+    }
+    
+    // Información de la plataforma
+    char platform[256];
+    size = sizeof(platform);
+    if (sysctlbyname("hw.platform", platform, &size, NULL, 0) == 0) {
+        // Usar platform como chipset
+        strncpy(status->motherboard.chipset, platform, 63);
+        status->motherboard.chipset[63] = '\0';
+    }
 }
 
 void get_system_load_xnu(SystemStatus *status)

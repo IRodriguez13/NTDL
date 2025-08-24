@@ -1,6 +1,10 @@
 #include "sysmon.h"
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+
+// Declaración de función externa
+extern float get_cpu_usage(void);
 
 // Variables globales para almacenar el estado del sistema
 static SystemStatus current_status;
@@ -10,14 +14,14 @@ int sysmon_init(void)
 {
     if (initialized)
         return 0;
-
-    // Inicializar estructura
-    memset(&current_status, 0, sizeof(SystemStatus));
-
-    // Recolectar métricas iniciales
-    collect_metrics(&current_status);
-
-    initialized = 1;
+        // Inicializar estructura
+        memset(&current_status, 0, sizeof(SystemStatus));
+        
+        // Recolectar métricas iniciales
+        collect_metrics(&current_status);
+        
+        initialized = 1;
+    
     return 0;
 }
 
@@ -29,8 +33,9 @@ int sysmon_get_metrics(SystemStatus *status)
             return -1;
     }
 
-    // Actualizar métricas
-    collect_metrics(&current_status);
+    // Solo actualizar el uso de CPU sin reinicializar
+    current_status.cpu_usage_percent = get_cpu_usage();
+    current_status.timestamp = time(NULL);
 
     // Copiar al buffer proporcionado
     if (status)
@@ -39,6 +44,11 @@ int sysmon_get_metrics(SystemStatus *status)
     }
 
     return 0;
+}
+
+size_t sysmon_get_system_status_size(void)
+{
+    return sizeof(SystemStatus);
 }
 
 // Funciones básicas

@@ -2,6 +2,7 @@
 #define SYSMON_H
 
 #include "metrics.h"
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C"
@@ -13,6 +14,9 @@ extern "C"
 
     // Obtener métricas del sistema
     int sysmon_get_metrics(SystemStatus *status);
+
+    // Función para obtener el tamaño de SystemStatus
+    size_t sysmon_get_system_status_size(void);
 
     // Obtener métricas específicas básicas
     float sysmon_get_cpu_usage(void);

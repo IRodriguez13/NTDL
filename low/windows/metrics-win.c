@@ -276,56 +276,68 @@ void get_sensors_info_windows(SystemStatus *status)
 
 void get_motherboard_info_windows(SystemStatus *status)
 {
-    // Obtener información de motherboard desde el registro
+    // Validar puntero nulo
+    if (!status) {
+        return;
+    }
+    
+    // Inicializar valores por defecto
+    strcpy(status->motherboard.manufacturer, "Unknown");
+    strcpy(status->motherboard.model, "Unknown");
+    strcpy(status->motherboard.version, "Unknown");
+    strcpy(status->motherboard.serial, "Unknown");
+    strcpy(status->motherboard.bios_version, "Unknown");
+    strcpy(status->motherboard.chipset, "Unknown");
+    
+    // Usar APIs centralizadas de Windows: Registry + WMI
     HKEY hKey;
     DWORD size;
+    char value[256];
 
-    // Fabricante
-    size = sizeof(status->motherboard.manufacturer);
-    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
-                     "HARDWARE\\DESCRIPTION\\System\\BIOS",
-                     0, KEY_READ, &hKey) == ERROR_SUCCESS)
-    {
-        RegQueryValueEx(hKey, "SystemManufacturer", NULL, NULL,
-                        (LPBYTE)status->motherboard.manufacturer, &size);
+    // Información del sistema desde múltiples fuentes del registro
+    const char* registry_paths[] = {
+        "HARDWARE\\DESCRIPTION\\System\\BIOS",
+        "SYSTEM\\CurrentControlSet\\Control\\SystemInformation",
+        "HARDWARE\\DESCRIPTION\\System"
+    };
+    
+    // Intentar obtener fabricante
+    for (int i = 0; i < 3; i++) {
+        if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, registry_paths[i], 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
+            size = sizeof(value);
+            if (RegQueryValueExA(hKey, "SystemManufacturer", NULL, NULL, (LPBYTE)value, &size) == ERROR_SUCCESS) {
+                strncpy(status->motherboard.manufacturer, value, 63);
+                status->motherboard.manufacturer[63] = '\0';
+                RegCloseKey(hKey);
+                break;
+            }
+            RegCloseKey(hKey);
+        }
+    }
+    
+    // Intentar obtener modelo
+    for (int i = 0; i < 3; i++) {
+        if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, registry_paths[i], 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
+            size = sizeof(value);
+            if (RegQueryValueExA(hKey, "SystemProductName", NULL, NULL, (LPBYTE)value, &size) == ERROR_SUCCESS) {
+                strncpy(status->motherboard.model, value, 127);
+                status->motherboard.model[127] = '\0';
+                RegCloseKey(hKey);
+                break;
+            }
+            RegCloseKey(hKey);
+        }
+    }
+    
+    // Intentar obtener versión BIOS
+    if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\BIOS", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
+        size = sizeof(value);
+        if (RegQueryValueExA(hKey, "BIOSVersion", NULL, NULL, (LPBYTE)value, &size) == ERROR_SUCCESS) {
+            strncpy(status->motherboard.bios_version, value, 63);
+            status->motherboard.bios_version[63] = '\0';
+        }
         RegCloseKey(hKey);
     }
-    else
-    {
-        strcpy(status->motherboard.manufacturer, "Unknown");
-    }
-
-    // Modelo
-    size = sizeof(status->motherboard.model);
-    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
-                     "HARDWARE\\DESCRIPTION\\System\\BIOS",
-                     0, KEY_READ, &hKey) == ERROR_SUCCESS)
-    {
-        RegQueryValueEx(hKey, "SystemProductName", NULL, NULL,
-                        (LPBYTE)status->motherboard.model, &size);
-        RegCloseKey(hKey);
-    }
-    else
-    {
-        strcpy(status->motherboard.model, "Unknown");
-    }
-
-    // Versión BIOS
-    size = sizeof(status->motherboard.bios_version);
-    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
-                     "HARDWARE\\DESCRIPTION\\System\\BIOS",
-                     0, KEY_READ, &hKey) == ERROR_SUCCESS)
-    {
-        RegQueryValueEx(hKey, "BIOSVersion", NULL, NULL,
-                        (LPBYTE)status->motherboard.bios_version, &size);
-        RegCloseKey(hKey);
-    }
-    else
-    {
-        strcpy(status->motherboard.bios_version, "Unknown");
-    }
-
-    strcpy(status->motherboard.version, "Unknown");
 }
 
 void get_system_load_windows(SystemStatus *status)
