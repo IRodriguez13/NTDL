@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 import ctypes
+import time
 import sys
 import os
 import platform
 import psutil
 from ctypes import POINTER, Structure, c_char_p, c_int, c_double
-import time
 
 # Configurar el path de la librería
 os.environ['LD_LIBRARY_PATH'] = '.'
@@ -20,8 +20,8 @@ class CpuInfo(Structure):
         ("mhz", c_double)
     ]
 
-def get_windows_system_info():
-    """Obtener información del sistema usando Python en Windows"""
+def get_system_info():
+    """Obtener información del sistema usando Python"""
     return {
         'platform': platform.system(),
         'platform_version': platform.version(),
@@ -36,20 +36,9 @@ def get_windows_system_info():
 
 def main():
     print("=== Test Windows de SysMon (10 segundos) ===")
-    
-    # Verificar que estamos en Windows
-    if platform.system() != "Windows":
-        print("❌ Este test está diseñado para Windows")
-        print(f"   Sistema actual: {platform.system()}")
-        sys.exit(1)
-    
-    try:
-        # Cargar la librería
-        lib = ctypes.CDLL("./libsysmon.so")
-        print("✅ Librería cargada correctamente")
-    except Exception as e:
-        print(f"❌ Error al cargar la librería: {e}")
-        sys.exit(1)
+
+    lib = ctypes.CDLL("C:\\Users\\Devnis\\Desktop\\sys_monitor\\sysmon.dll")
+    print("✅ Librería cargada correctamente")
     
     # Configurar tipos de retorno y argumentos
     lib.alloc_cpu_info.restype = POINTER(CpuInfo)
@@ -61,7 +50,7 @@ def main():
     # 0. Información del sistema usando Python
     print("\n0. Información del sistema (Python):")
     print("-" * 40)
-    sys_info = get_windows_system_info()
+    sys_info = get_system_info()
     print(f"   Plataforma: {sys_info['platform']} {sys_info['platform_version']}")
     print(f"   Arquitectura: {sys_info['machine']}")
     print(f"   Procesador: {sys_info['processor']}")
@@ -77,6 +66,7 @@ def main():
     print("\n1. Información del CPU (Librería C):")
     print("-" * 40)
     
+    # Usar alloc_cpu_info
     info_ptr = lib.alloc_cpu_info()
     info = info_ptr.contents
     
@@ -121,12 +111,7 @@ def main():
         # Obtener información adicional usando Python
         cpu_usage_py = psutil.cpu_percent(interval=0.1)
         memory = psutil.virtual_memory()
-        
-        # En Windows no hay load average nativo, usamos psutil
-        try:
-            load_avg = psutil.getloadavg()
-        except:
-            load_avg = (0.0, 0.0, 0.0)
+        load_avg = psutil.getloadavg()
         
         elapsed = time.time() - start_time
         
@@ -146,7 +131,7 @@ def main():
     
     print("=" * 80)
     print("✅ Test completado exitosamente")
-    print("La librería funciona correctamente desde Python en Windows")
+    print("La librería funciona correctamente desde Python en Linux")
     
     # 4. Información adicional del sistema
     print(f"\n4. Información adicional:")
