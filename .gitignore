@@ -1,0 +1,45 @@
+# Logs
+client/logs
+client/*.log
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+client/pnpm-debug.log*
+client/lerna-debug.log*
+
+# Node modules y builds
+client/node_modules
+client/dist
+client/dist-ssr
+client/coverage
+client/*.local
+
+# Cypress
+client/cypress/videos/
+client/cypress/screenshots/
+
+# Editor directories and files
+client/.vscode/*
+!client/.vscode/extensions.json
+client/.idea
+client/*.suo
+client/*.ntvs*
+client/*.njsproj
+client/*.sln
+client/*.sw?
+
+client/*.tsbuildinfo
+
+# Developer tools' files
+neutralino/.lite_workspace.lua
+
+# Neutralinojs binaries and builds
+neutralino/bin
+neutralino/dist
+
+# Neutralinojs client (minified)
+neutralino/neutralino.js
+
+# Neutralinojs related files
+neutralino/.storage
+neutralino/*.log

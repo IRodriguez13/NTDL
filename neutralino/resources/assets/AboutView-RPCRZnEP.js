@@ -1,0 +1,1 @@
+import{_ as o,c as s,a as t,o as a}from"./index-DXVrR7b6.js";const n={},c={class:"about"};function r(E,e){return a(),s("div",c,[...e[0]||(e[0]=[t("h1",null,"This is an about page PENEEEEEEEEEe",-1)])])}const i=o(n,[["render",r]]);export{i as default};
