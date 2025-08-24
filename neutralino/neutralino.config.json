@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/neutralinojs/neutralinojs/main/schemas/neutralino.config.schema.json",
-  "applicationId": "js.neutralino.sample",
+  "applicationId": "js.neutralino.sysmon",
   "version": "1.0.0",
   "defaultMode": "window",
   "port": 0,
@@ -32,11 +32,11 @@
   },
   "modes": {
     "window": {
-      "title": "neutralino",
-      "width": 800,
-      "height": 500,
-      "minWidth": 400,
-      "minHeight": 200,
+      "title": "SysMon",
+      "width": 1000,
+      "height": 600,
+      "minWidth": 1000,
+      "minHeight": 600,
       "center": true,
       "fullScreen": false,
       "alwaysOnTop": false,
@@ -46,7 +46,7 @@
       "maximize": false,
       "hidden": false,
       "resizable": true,
-      "exitProcessOnClose": false
+      "exitProcessOnClose": true
     },
     "browser": {
       "globalVariables": {

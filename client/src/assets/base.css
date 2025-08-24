@@ -36,6 +36,20 @@
   --section-gap: 160px;
 }
 
+:root {
+  /* Layered purple color palette */
+  --layer-0: #000000;
+  --layer-1: #180631;
+  --layer-2: #300d63;
+  --layer-3: #491495;
+  --layer-4: #611bc7;
+  --layer-5: #7d37e3;
+  --layer-6: #9e69ea;
+  --layer-7: #be9bf1;
+  --layer-8: #decdf8;
+  --layer-9: #ffffff;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --color-background: var(--vt-c-black);
@@ -79,7 +93,7 @@ body {
     'Droid Sans',
     'Helvetica Neue',
     sans-serif;
-  font-size: 15px;
+  font-size: 2em;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
