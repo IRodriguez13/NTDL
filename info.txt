@@ -1,0 +1,105 @@
+Estructura CoreInfo:
+
+typedef struct {
+    int core_id;              // ID del núcleo
+    float temperature;        // Temperatura en °C
+    float frequency;          // Frecuencia en MHz
+    float voltage;            // Voltaje en V
+    float usage_percent;      // Uso en porcentaje
+    int load;                 // Carga del núcleo
+    float max_frequency;      // Frecuencia máxima en MHz
+    float min_frequency;      // Frecuencia mínima en MHz
+} CoreInfo;
+
+
+Estructura DetailedRamInfo:
+
+typedef struct {
+    char type[32];            // Tipo de RAM (DDR3/DDR4/DDR5)
+    unsigned long total_kb;   // Total en KB
+    unsigned long used_kb;    // Usado en KB
+    unsigned long free_kb;    // Libre en KB
+    unsigned long cached_kb;  // Cache en KB
+    unsigned long swap_total_kb;  // Swap total en KB
+    unsigned long swap_used_kb;   // Swap usado en KB
+    int frequency_mhz;        // Frecuencia en MHz
+    int num_sticks;           // Número de módulos
+    unsigned long l1_cache_kb;    // Cache L1 en KB
+    unsigned long l2_cache_kb;    // Cache L2 en KB
+    unsigned long l3_cache_kb;    // Cache L3 en KB
+} DetailedRamInfo;
+
+
+Estructura DiskInfo:
+
+typedef struct {
+    char name[64];            // Nombre del disco
+    char device_path[64];     // Ruta del dispositivo
+    char protocol[16];        // Protocolo (SATA/SSD/NVMe)
+    char model[128];          // Modelo del disco
+    char serial[64];          // Número de serie
+    unsigned long total_kb;   // Capacidad total en KB
+    unsigned long free_kb;    // Espacio libre en KB
+    unsigned long used_kb;    // Espacio usado en KB
+    float usage_percent;      // Porcentaje de uso
+    float temperature;        // Temperatura en °C
+    unsigned long sectors_read;   // Sectores leídos
+    unsigned long sectors_written; // Sectores escritos
+    unsigned long read_errors;     // Errores de lectura
+    unsigned long write_errors;    // Errores de escritura
+    unsigned long power_on_hours;  // Horas de funcionamiento
+    unsigned long power_cycles;    // Ciclos de encendido
+    int smart_status;         // Estado SMART
+    int health;              // Salud del disco (0-100)
+    char mount_point[256];   // Punto de montaje
+    char filesystem[32];     // Sistema de archivos
+} DiskInfo;
+
+
+Estructura NetworkInfo:
+
+typedef struct {
+    char name[32];            // Nombre de la interfaz
+    char mac[18];             // Dirección MAC
+    char ip[16];              // Dirección IP
+    char netmask[16];         // Máscara de red
+    char gateway[16];         // Gateway
+    char dns1[16];            // DNS primario
+    char dns2[16];            // DNS secundario
+    char driver[64];          // Driver de la interfaz
+    char type[16];            // Tipo de interfaz
+    unsigned long rx_bytes;   // Bytes recibidos
+    unsigned long tx_bytes;   // Bytes transmitidos
+    unsigned long rx_packets; // Paquetes recibidos
+    unsigned long tx_packets; // Paquetes transmitidos
+    unsigned long rx_errors;  // Errores de recepción
+    unsigned long tx_errors;  // Errores de transmisión
+    unsigned long rx_dropped; // Paquetes descartados en recepción
+    unsigned long tx_dropped; // Paquetes descartados en transmisión
+    int speed_mbps;           // Velocidad en Mbps
+    int duplex;               // Modo duplex
+    int mtu;                  // MTU
+} NetworkInfo;
+
+
+Estructura SensorInfo:
+
+typedef struct {
+    char name[64];            // Nombre del sensor
+    char type[16];            // Tipo (temp/voltage/fan)
+    float value;              // Valor del sensor
+    char unit[8];             // Unidad de medida
+    int critical;             // Valor crítico
+    int min_value;            // Valor mínimo
+    int max_value;            // Valor máximo
+} SensorInfo;
+
+
+Estructura MotherboardInfo:
+
+typedef struct {
+    char manufacturer[64];    // Fabricante
+    char model[128];          // Modelo
+    char version[32];         // Versión
+    char bios_version[64];    // Versión del BIOS
+} MotherboardInfo;

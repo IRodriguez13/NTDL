@@ -2,12 +2,18 @@ import { createRouter, createWebHistory } from 'vue-router'
 import CpuView from '../views/CpuView.vue'
 import RamView from '../views/RamView.vue'
 import DiskView from '../views/DiskView.vue'
+import DashboardView from '../views/DashboardView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
+      path: '/dashboard',
+      name: 'dashboard',
+      component: DashboardView,
+    },
+    {
+      path: '/cpu',
       name: 'cpu',
       component: CpuView,
     },

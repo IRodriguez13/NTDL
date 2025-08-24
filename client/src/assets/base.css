@@ -37,17 +37,29 @@
 }
 
 :root {
-  /* Layered purple color palette */
+  /* Layered black color palette */
   --layer-0: #000000;
-  --layer-1: #180631;
-  --layer-2: #300d63;
-  --layer-3: #491495;
-  --layer-4: #611bc7;
-  --layer-5: #7d37e3;
-  --layer-6: #9e69ea;
-  --layer-7: #be9bf1;
-  --layer-8: #decdf8;
-  --layer-9: #ffffff;
+  --layer-1: #111111;
+  --layer-2: #1a1a1a;
+  --layer-3: #222222;
+  --layer-4: #2a2a2a;
+  --layer-5: #333333;
+  --layer-6: #3b3b3b;
+  --layer-7: #444444;
+  --layer-8: #4c4c4c;
+  --layer-9: #555555;
+  --layer-10: #5d5d5d;
+  --layer-11: #666666;
+  --layer-12: #767676;
+  --layer-13: #868686;
+  --layer-14: #969696;
+  --layer-15: #a6a6a6;
+  --layer-16: #ffffff;
+
+  --text-blue: #156dc6;
+
+  --title-color: rgb(235, 229, 229);
+  --paragraf-color: rgb(183, 174, 174);
 }
 
 @media (prefers-color-scheme: dark) {
