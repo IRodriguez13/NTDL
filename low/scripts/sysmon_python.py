@@ -116,8 +116,10 @@ class SysMon:
         self.lib.sysmon_get_ram_used.restype = ctypes.c_ulong
         self.lib.sysmon_get_ram_usage_percent.restype = ctypes.c_float
         self.lib.sysmon_get_os_name.restype = ctypes.c_char_p
-        self.lib.sysmon_get_disk_model.restype = ctypes.c_char_p
-        self.lib.sysmon_get_disk_health.restype = ctypes.c_int
+        self.lib.sysmon_get_num_disks.restype = ctypes.c_int
+        self.lib.sysmon_get_num_network_interfaces.restype = ctypes.c_int
+        self.lib.sysmon_get_num_sensors.restype = ctypes.c_int
+
 
     
     def init(self):
@@ -192,15 +194,22 @@ class SysMon:
         self.init()
         return self.lib.sysmon_get_os_name().decode('utf-8')
     
-    def get_disk_model(self) -> str:
-        """Obtener modelo del disco"""
+    def get_num_disks(self) -> int:
+        """Obtener número de discos"""
         self.init()
-        return self.lib.sysmon_get_disk_model().decode('utf-8')
+        return self.lib.sysmon_get_num_disks()
     
-    def get_disk_health(self) -> int:
-        """Obtener salud del disco (%)"""
+    def get_num_network_interfaces(self) -> int:
+        """Obtener número de interfaces de red"""
         self.init()
-        return self.lib.sysmon_get_disk_health()
+        return self.lib.sysmon_get_num_network_interfaces()
+    
+    def get_num_sensors(self) -> int:
+        """Obtener número de sensores"""
+        self.init()
+        return self.lib.sysmon_get_num_sensors()
+    
+
     
 
     
