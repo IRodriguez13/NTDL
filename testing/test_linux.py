@@ -6,6 +6,7 @@ import os
 import platform
 import psutil
 from ctypes import POINTER, Structure, c_char_p, c_int, c_double
+from multiprint import *
 
 # Configurar el path de la librería
 os.environ['LD_LIBRARY_PATH'] = '.'
