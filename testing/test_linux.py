@@ -59,7 +59,7 @@ def main():
     lib.get_cpu_model.restype = c_int
     
     # 0. Información del sistema usando Python
-    print("\n0. Información del sistema (Python):")
+    print("\n0. Información del sistema (En el script de mierda de Python):")
     print("-" * 40)
     sys_info = get_system_info()
     print(f"   Plataforma: {sys_info['platform']} {sys_info['platform_version']}")

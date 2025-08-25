@@ -14,23 +14,25 @@ int get_cpu_model(char *buffer, size_t size)
     char line[256];
     while (fgets(line, sizeof(line), f))
     {
-        if (strncmp(line, "model name", 10) == 0)
+        int ret = strncmp(line, "model name", 10);
+        if(ret == 0) 
         {
-            char *colon = strchr(line, ':');
-            if (colon)
-            {
-                snprintf(buffer, size, "%s", colon + 2); // skip ": "
-                buffer[strcspn(buffer, "\n")] = 0;       // quitar salto
-                fclose(f);
-                return 0;
-            }
+            perror("Datos nulos");
+            return -1.0;
+        }
+        char *colon = strchr(line, ':');
+        if (colon)
+        {
+            snprintf(buffer, size, "%s", colon + 2); // skip ": "
+            buffer[strcspn(buffer, "\n")] = 0;       // quitar salto
+            fclose(f);
+            return 0;
         }
     }
 
     fclose(f);
     return -1;
 }
-
 
 // CPU uso: calculamos diferencia de tiempos de /proc/stat
 double get_cpu_usage()
@@ -47,15 +49,16 @@ double get_cpu_usage()
     char cpu[128];
     long user, nice, system, idle, iowait, irq, softirq, steal;
 
-    if (!fscanf(f, "%s %ld %ld %ld %ld %ld %ld %ld %ld",
-               cpu, &user, &nice, &system, &idle,
-               &iowait, &irq, &softirq, &steal) == 9)
+    int ret = fscanf(f, "%s %ld %ld %ld %ld %ld %ld %ld %ld",
+                     cpu, &user, &nice, &system, &idle,
+                     &iowait, &irq, &softirq, &steal);
+
+    if (ret != 9)
     {
-        perror("ERR en los datos de la cpu");
+        perror("Datos incorrectos");
         fclose(f);
         return -1.0;
     }
-
     fclose(f);
 
     long idleAll = idle + iowait;
