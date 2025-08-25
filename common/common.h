@@ -1,7 +1,9 @@
 #pragma once
 #include <stddef.h>
 #define CPU_MODEL_LEN 128
+#define DISK_MODEL_LEN 128
 
+// common.h o disk_linux.h
 
 typedef struct
 {

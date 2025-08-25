@@ -4,7 +4,7 @@ TARGET_LINUX = libsysmon.so
 TARGET_WINDOWS = sysmon.dll
 
 SRC_COMMON = common/common.c
-SRC_LINUX = src/cpu_linux.c
+SRC_LINUX = src/cpu_linux.c src/disk_linux.c
 SRC_WINDOWS = src/cpu_windows.c
 
 # Detección de OS
