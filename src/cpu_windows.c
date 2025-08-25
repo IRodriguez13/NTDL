@@ -151,7 +151,8 @@ int get_cpu_info_windows(char *vendor, char *model, int *cores, double *frequenc
     }
     
     // Obtener frecuencia (aproximada)
-    if (frequency) {
+    if (frequency) 
+    {
         // Windows no proporciona frecuencia en tiempo real fácilmente
         // Usamos una aproximación basada en la arquitectura
         switch (sysInfo.wProcessorArchitecture) {
