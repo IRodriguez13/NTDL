@@ -14,6 +14,7 @@ const app = createApp(App)
 // Agregar íconos a la librería
 library.add(faTachometerAlt, faMicrochip, faMemory, faHdd, faDesktop);
 app.component('font-awesome-icon', FontAwesomeIcon)
+
 app.use(createPinia())
 app.use(router)
 

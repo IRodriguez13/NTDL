@@ -103,3 +103,6 @@ typedef struct {
     char version[32];         // Versión
     char bios_version[64];    // Versión del BIOS
 } MotherboardInfo;
+
+
+                                                    

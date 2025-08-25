@@ -39,22 +39,14 @@
 :root {
   /* Layered black color palette */
   --layer-0: #000000;
-  --layer-1: #111111;
-  --layer-2: #1a1a1a;
-  --layer-3: #222222;
-  --layer-4: #2a2a2a;
-  --layer-5: #333333;
-  --layer-6: #3b3b3b;
-  --layer-7: #444444;
-  --layer-8: #4c4c4c;
-  --layer-9: #555555;
-  --layer-10: #5d5d5d;
-  --layer-11: #666666;
-  --layer-12: #767676;
-  --layer-13: #868686;
-  --layer-14: #969696;
-  --layer-15: #a6a6a6;
-  --layer-16: #ffffff;
+  --layer-1: #070707;
+  --layer-2: #101010;
+  --layer-3: #181818;
+  --layer-4: #202020;
+  --layer-5: #282828;
+  --layer-6: #303030;
+  --layer-7: #383838;
+  --layer-8: #404040;
 
   --text-blue: #156dc6;
 
