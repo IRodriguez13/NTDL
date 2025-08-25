@@ -293,8 +293,9 @@ def main():
         # Liberar memoria
         lib.free_cpu_info(info_ptr)
         
-        time.sleep(1)
-    
+        time.sleep(0.5)
+
+        
     print("=" * 80)
     print("✅ Test completado exitosamente")
     print("La librería funciona correctamente desde Python en Linux")

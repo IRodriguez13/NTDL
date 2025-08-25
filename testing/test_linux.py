@@ -134,12 +134,13 @@ def main():
               f"{load_avg[0]:6.2f}   "
               f"{load_avg[1]:6.2f}   "
               f"{load_avg[2]:6.2f}")
-        
+
+                
         # Liberar memoria
         lib.free_cpu_info(info_ptr)
-        
-        time.sleep(1)
-    
+
+        time.sleep(0.5)
+
     print("=" * 80)
     print("✅ Test completado exitosamente")
     print("La librería funciona correctamente desde Python en Linux")
