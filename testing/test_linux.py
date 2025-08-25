@@ -35,11 +35,11 @@ def get_system_info():
     }
 
 def main():
-    print("=== Test Linux de SysMon (10 segundos) ===")
+    print("=== Test Linux de SysMonitor (10 segundos) ===")
     
     # Verificar que estamos en Linux
     if platform.system() != "Linux":
-        print("❌ Este test está diseñado para Linux")
+        print("Este test está diseñado para Linux")
         print(f"   Sistema actual: {platform.system()}")
         sys.exit(1)
     
@@ -48,7 +48,7 @@ def main():
         lib = ctypes.CDLL("./../libsysmon.so")
         print("✅ Librería cargada correctamente")
     except Exception as e:
-        print(f"❌ Error al cargar la librería: {e}")
+        print(f"Error al cargar la librería: {e}")
         sys.exit(1)
     
     # Configurar tipos de retorno y argumentos
@@ -97,7 +97,7 @@ def main():
     if lib.get_cpu_model(cpu_model_buffer, CPU_MODEL_LEN) == 0:
         print(f"   Modelo: {cpu_model_buffer.value.decode()}")
     else:
-        print("   Error al obtener modelo de CPU")
+        print("Error al obtener modelo de CPU")
     
     # 3. Monitoreo en tiempo real por 10 segundos
     print(f"\n3. Monitoreo en tiempo real (10 segundos):")

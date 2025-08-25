@@ -44,10 +44,10 @@ double get_cpu_usage()
         return -1.0;
     }
 
-    char cpu[5];
+    char cpu[128];
     long user, nice, system, idle, iowait, irq, softirq, steal;
 
-    if (fscanf(f, "%s %ld %ld %ld %ld %ld %ld %ld %ld",
+    if (!fscanf(f, "%s %ld %ld %ld %ld %ld %ld %ld %ld",
                cpu, &user, &nice, &system, &idle,
                &iowait, &irq, &softirq, &steal) == 9)
     {
