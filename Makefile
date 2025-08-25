@@ -26,7 +26,7 @@ OBJS = $(SRCS:.c=.o)
 
 # Variables para Python
 PYTHON = python3
-PYTHON_SCRIPTS_DIR = scripts
+PYTHON_SCRIPTS_DIR = testing
 PYTHON_TEST = $(PYTHON_SCRIPTS_DIR)/test.py
 PYTHON_TEST_LINUX = $(PYTHON_SCRIPTS_DIR)/test_linux.py
 PYTHON_TEST_WINDOWS = $(PYTHON_SCRIPTS_DIR)/test_windows.py

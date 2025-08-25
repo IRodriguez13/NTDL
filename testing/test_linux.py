@@ -6,7 +6,6 @@ import os
 import platform
 import psutil
 from ctypes import POINTER, Structure, c_char_p, c_int, c_double
-from multiprint import *
 
 # Configurar el path de la librería
 os.environ['LD_LIBRARY_PATH'] = '.'
@@ -46,7 +45,7 @@ def main():
     
     try:
         # Cargar la librería
-        lib = ctypes.CDLL("./libsysmon.so")
+        lib = ctypes.CDLL("./../libsysmon.so")
         print("✅ Librería cargada correctamente")
     except Exception as e:
         print(f"❌ Error al cargar la librería: {e}")
