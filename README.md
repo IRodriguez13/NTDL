@@ -2,7 +2,7 @@
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/your-repo/sysmon)
 [![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Windows%20%7C%20macOS-blue)](https://github.com/your-repo/sysmon)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 SysMon es una biblioteca C multiplataforma para obtener métricas detalladas del sistema operativo, incluyendo información de CPU, RAM, discos, red, GPU, sensores y más. Diseñada para ser consumida desde Python mediante FFI (ctypes).
 
