@@ -1,10 +1,10 @@
-# SysMon - Biblioteca de Monitoreo de Sistema Multiplataforma
+# TNATDL - This is Not a To Do List
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/your-repo/sysmon)
 [![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Windows%20%7C%20macOS-blue)](https://github.com/your-repo/sysmon)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-SysMon es una biblioteca C multiplataforma para obtener métricas detalladas del sistema operativo, incluyendo información de CPU, RAM, discos, red, GPU, sensores y más. Diseñada para ser consumida desde Python mediante FFI (ctypes).
+TNATDL es una aplicación de escritorio basada en una librería multiplataforma para obtener métricas detalladas del sistema operativo, incluyendo información de CPU, RAM, discos, red, GPU, sensores y más en lenguaje C. Diseñada para ser consumida desde Python mediante FFI (ctypes).
 
 ## 🚀 Características
 
