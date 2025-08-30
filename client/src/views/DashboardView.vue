@@ -2,8 +2,8 @@
   <div class="view">
     <div class="container-general">
       <InfoView 
-      title="CPU Monitor" 
-      subtitle="Procesador funcionando correctamente" 
+      title="Dashboard" 
+      subtitle="Informacion general del sistema" 
       />
       <StatusView 
         uptime="72 hours"
@@ -55,30 +55,25 @@
         />
       </div>
     </div>
+    <div class="container-quick-actions">
+      <QuickActions 
+        :actions="[
+          { label: 'Restart', handler: () => console.log('Restart clicked') },
+          { label: 'Shutdown', handler: () => console.log('Shutdown clicked') },
+          { label: 'Update', handler: () => console.log('Update clicked') },
+        ]"
+      /> 
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import InfoView from '../components/headers/InfoViews.vue';
-import StatusView from '../components/headers/StatusView.vue';
-import SystemInfoCard from '../components/fastcards/SystemInfoCard.vue';
+import InfoView from '@/components/headers/InfoViews.vue';
+import StatusView from '@/components/headers/StatusView.vue';
+import SystemInfoCard from '@/components/fastcards/SystemInfoCard.vue';
 import InfoResumCard from '@/components/fastcards/InfoResumCard.vue';
+import QuickActions from '@/components/fastcards/QuicksActions.vue';
 </script>
 
 <style scoped>
-.container-general, .container-info {
-  display: flex;
-  gap: 10px;
-}
-
-.container-general > *, .container-info > * {
-  flex: 1; 
-}
-
-.container-cards-sys {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex: 1;
-}
 </style>

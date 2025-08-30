@@ -1,5 +1,5 @@
 <template>
-  <div class="system-card efect-frost">
+  <div class="system-card">
     <div class="system-left">
       <img v-if="icon" :src="icon" alt="System Icon" class="system-icon" />
       <i v-else class="fas fa-desktop system-icon"></i>
@@ -27,14 +27,12 @@ function formatKey(key: string) {
 <style scoped>
 .system-card {
   display: flex;
-  /* background-color: var(--layer-4); */
+  background-color: var(--layer-4);
   justify-items: center;
   align-items: center;
   border-radius: 10px;
   gap: 15px;
   min-height: 420px;
-  flex: 1;
-  flex-wrap: wrap;
 }
 
 .system-right {
@@ -66,7 +64,7 @@ function formatKey(key: string) {
 /* ////////////////////////////////////////// */
 .info-row {
   display: flex;
-  gap: 10px; /* espacio entre key y value */
+  gap: 10px;
   font-family: 'Courier New', monospace;
   font-size: 0.95rem;
 }
@@ -74,11 +72,11 @@ function formatKey(key: string) {
 .info-key {
   font-weight: 600;
   color: var(--text-blue);
-  min-width: 120px; /* todas las keys alineadas */
+  min-width: 120px;
 }
 
 .info-value {
   color: var(--paragraf-color);
-  flex: 1; /* ocupa el resto del espacio */
+  flex: 1;
 }
 </style>

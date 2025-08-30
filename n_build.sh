@@ -17,4 +17,4 @@ rm -rf dist
 
 echo "🖥 Ejecutando Neutralino..."
 cd "../$NEU_DIR" || exit
-bunx @neutralinojs/neu run
+./neutralino-linux_x64 run
