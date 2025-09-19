@@ -20,7 +20,7 @@ CpuInfo *alloc_cpu_info()
 
     if (info == NULL)
     {
-        perror("NULL pointer");
+        Kerror("NULL pointer");
         return NULL;
     }
 
@@ -115,7 +115,7 @@ void free_cpu_info(CpuInfo *info)
 {
     if (info == NULL)
     {
-        perror("NULL pointer");
+        Kerror("NULL pointer");
         return;
     }
 

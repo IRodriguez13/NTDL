@@ -1,5 +1,6 @@
 #pragma once
 #include <stddef.h>
+#define Kerror(msg) perror(msg)
 
 typedef struct
 {

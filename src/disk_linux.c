@@ -17,7 +17,7 @@ int get_disk_smart(const char *device, DiskInfo *info)
     int fd = open(device, O_RDONLY);
     if (fd < 0)
     {
-        perror("No se puede abrir disco (fallback a /sys)");
+        fprintf(stderr, "No se pudo abrir el dispositivo %s: %s\n", device, strerror(errno));
         // Fallback: leer info básica desde /sys/block
         char path[256];
         FILE *f;
@@ -99,6 +99,11 @@ int get_disk_smart(const char *device, DiskInfo *info)
 DiskInfo *alloc_disk_info()
 {
     DiskInfo *d = (DiskInfo *)malloc(sizeof(DiskInfo));
+    if(d == NULL) 
+    {
+        Kerror("malloc");
+        return NULL;    
+    }
     if (d)
     {
         memset(d, 0, sizeof(DiskInfo));

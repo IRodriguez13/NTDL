@@ -7,7 +7,7 @@ int get_cpu_model(char *buffer, size_t size)
     FILE *f = fopen("/proc/cpuinfo", "r");
     if (f == NULL)
     {
-        perror("NULL pointer");
+        fprintf(stderr, "No se pudo abrir /proc/cpuinfo\n");   
         return -1;
     }
 
@@ -17,7 +17,7 @@ int get_cpu_model(char *buffer, size_t size)
         int ret = strncmp(line, "model name", 10);
         if(ret == 0) 
         {
-            perror("Datos nulos");
+            fprintf(stderr, "No se pudo encontrar el modelo de CPU\n");
             return -1.0;
         }
         char *colon = strchr(line, ':');
@@ -42,7 +42,7 @@ double get_cpu_usage()
     FILE *f = fopen("/proc/stat", "r");
     if (f == NULL)
     {
-        perror("NULL pointer");
+        fprintf(stderr, "No se pudo abrir /proc/stat\n");
         return -1.0;
     }
 
@@ -55,7 +55,7 @@ double get_cpu_usage()
 
     if (ret != 9)
     {
-        perror("Datos incorrectos");
+        fprintf(stderr, "No se pudo leer /proc/stat\n");
         fclose(f);
         return -1.0;
     }
@@ -72,7 +72,7 @@ double get_cpu_usage()
 
     if (diffTotal == 0)
     {
-        perror("ERR en el cálculo de porcentaje. División por cero.");
+        fprintf(stderr, "No se pudo calcular el uso de la CPU\n");
         return 0.0;
     }
 

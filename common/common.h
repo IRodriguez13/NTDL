@@ -2,6 +2,7 @@
 #include <stddef.h>
 #define CPU_MODEL_LEN 128
 #define DISK_MODEL_LEN 128
+#define Kerror(msg) perror(msg)
 
 // common.h o disk_linux.h
 
