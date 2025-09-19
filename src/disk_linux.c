@@ -102,7 +102,7 @@ DiskInfo *alloc_disk_info()
     if(d == NULL) 
     {
         Kerror("malloc");
-        return NULL;    
+        goto cleanup;    
     }
     if (d)
     {
@@ -111,9 +111,10 @@ DiskInfo *alloc_disk_info()
     }
     
     return d;
+    
+    cleanup:
+        free(d);
+        return NULL;
+
 }
 
-void free_disk_info(DiskInfo *d)
-{
-    free(d);
-}

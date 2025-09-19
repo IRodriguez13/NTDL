@@ -76,13 +76,11 @@ def main():
 
     # ------------------ CONFIGURACIÓN TIPOS ------------------
     lib.alloc_cpu_info.restype = POINTER(CpuInfo)
-    lib.free_cpu_info.argtypes = [POINTER(CpuInfo)]
     lib.get_cpu_usage.restype = c_double
     lib.get_cpu_model.argtypes = [c_char_p, ctypes.c_size_t]
     lib.get_cpu_model.restype = c_int
 
     lib.alloc_disk_info.restype = POINTER(DiskInfo)
-    lib.free_disk_info.argtypes = [POINTER(DiskInfo)]
     lib.get_disk_smart.argtypes = [c_char_p, POINTER(DiskInfo)]
     lib.get_disk_smart.restype = c_int
 
@@ -106,7 +104,6 @@ def main():
     print(f"   Model:  {cpu.model.decode(errors='ignore')}")
     print(f"   Cores:  {cpu.cores}")
     print(f"   MHz:    {cpu.mhz:.0f}")
-    lib.free_cpu_info(cpu_ptr)
 
     # ------------------ DISCO ------------------
     disk_ptr = lib.alloc_disk_info()
@@ -119,7 +116,6 @@ def main():
         print(f"   Power On Hours: {disk.power_on_hours} h")
     else:
         print("   SMART no disponible (fallback a info básica)")
-    lib.free_disk_info(disk_ptr)
 
     # ------------------ MONITOREO EN TIEMPO REAL ------------------
     print("\nMonitoreo en tiempo real (10s):")
@@ -129,8 +125,6 @@ def main():
         cpu_usage = lib.get_cpu_usage()
         cpu_ptr = lib.alloc_cpu_info()
         freq = cpu_ptr.contents.mhz
-        lib.free_cpu_info(cpu_ptr)
-
         mem = psutil.virtual_memory()
         elapsed = time.time() - start_time
         print(f"{elapsed:5.1f}s  {cpu_usage:6.2f}%   {freq:8.0f}MHz {mem.percent:6.1f}%")

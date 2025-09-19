@@ -6,12 +6,14 @@
 void print_cpu_info(const CpuInfo *info)
 {
 
-    printf("==== CPU Info ====\n");
+    printf("\n==== CPU Info ====\n");
+
     printf("Vendor:   %s\n", info->vendor ? info->vendor : "Unknown");
     printf("Model:    %s\n", info->model ? info->model : "Unknown");
     printf("Cores:    %d\n", info->cores);
     printf("Freq MHz: %.2f\n", info->mhz);
-    printf("==================\n");
+    
+    printf("\n==================\n");
 }
 
 CpuInfo *alloc_cpu_info()
@@ -21,7 +23,7 @@ CpuInfo *alloc_cpu_info()
     if (info == NULL)
     {
         Kerror("NULL pointer");
-        return NULL;
+        goto cleanup;    
     }
 
     memset(info, 0, sizeof(CpuInfo));
@@ -30,14 +32,14 @@ CpuInfo *alloc_cpu_info()
     char cpu_model[CPU_MODEL_LEN];
 
     // Obtener modelo de CPU
-    if (get_cpu_model(cpu_model, CPU_MODEL_LEN) == 0)
-    {
-        info->model = strdup(cpu_model);
-    }
-    else
+    if (get_cpu_model(cpu_model, CPU_MODEL_LEN) != 0)
     {
         info->model = strdup("Unknown");
     }
+    
+    info->model = strdup(cpu_model);
+    
+    
 
 // Obtener información adicional según la plataforma
 #ifdef _WIN32
@@ -60,7 +62,7 @@ CpuInfo *alloc_cpu_info()
     }
 #else
     // En Linux, obtener información básica
-    info->vendor = strdup("Linux CPU");
+    info->vendor = strdup("Linux CPU"); // Esto está hardcodeado por ahora
 
     // Obtener número de núcleos desde /proc/cpuinfo
     FILE *f = fopen("/proc/cpuinfo", "r");
@@ -109,19 +111,10 @@ CpuInfo *alloc_cpu_info()
 #endif
 
     return info;
-}
-
-void free_cpu_info(CpuInfo *info)
-{
-    if (info == NULL)
-    {
-        Kerror("NULL pointer");
-        return;
-    }
-
+    
+    cleanup:
     free(info->vendor);
     free(info->model);
     free(info);
 }
-
 
