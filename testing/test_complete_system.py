@@ -472,7 +472,6 @@ def main():
     print(f"  {Colors.OKGREEN}✅ Sistema: Carga, procesos, uptime{Colors.ENDC}")
     
     print(f"\n{Colors.HEADER}{Colors.BOLD}🚀 SISTEMA COMPLETO - LISTO PARA APLICACIONES DE ESCRITORIO{Colors.ENDC}")
-    print(f"{Colors.OKCYAN}Tu compañero puede usar este sistema para obtener TODA la información del hardware{Colors.ENDC}")
     print(f"{Colors.OKCYAN}Monitoreo en tiempo real: ✅ | Multiplataforma: ✅ | API completa: ✅{Colors.ENDC}")
     
     # Limpiar recursos

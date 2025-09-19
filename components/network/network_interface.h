@@ -1,6 +1,7 @@
 /**
  * @file network_interface.h
- * @brief Interfaz común para obtener información de red en todas las plataformas
+ * @brief Interfaz común para obtener información de red en todas las
+ * plataformas
  */
 
 #ifndef NETWORK_INTERFACE_H
@@ -14,7 +15,8 @@ extern "C" {
 
 /* ============================================================================
  * INTERFAZ COMÚN DE RED
- * ============================================================================ */
+ * ============================================================================
+ */
 
 /**
  * @brief Inicializa el módulo de red
@@ -36,7 +38,8 @@ int network_get_interface_count(void);
 /**
  * @brief Obtiene información de una interfaz de red específica
  * @param interface_id ID de la interfaz (0 a interface_count-1)
- * @param net_info Puntero a estructura NetworkInfo donde almacenar la información
+ * @param net_info Puntero a estructura NetworkInfo donde almacenar la
+ * información
  * @return 0 en éxito, -1 en error
  */
 int network_get_interface_info(int interface_id, NetworkInfo *net_info);
@@ -44,10 +47,12 @@ int network_get_interface_info(int interface_id, NetworkInfo *net_info);
 /**
  * @brief Obtiene estadísticas de una interfaz de red
  * @param interface_name Nombre de la interfaz (ej: eth0, wlan0)
- * @param net_info Puntero a estructura NetworkInfo donde almacenar las estadísticas
+ * @param net_info Puntero a estructura NetworkInfo donde almacenar las
+ * estadísticas
  * @return 0 en éxito, -1 en error
  */
-int network_get_interface_stats(const char *interface_name, NetworkInfo *net_info);
+int network_get_interface_stats(const char *interface_name,
+                                NetworkInfo *net_info);
 
 /**
  * @brief Verifica si una interfaz está activa
@@ -70,7 +75,8 @@ int network_is_interface_wireless(const char *interface_name);
  * @param buffer_size Tamaño del buffer
  * @return 0 en éxito, -1 en error
  */
-int network_get_interface_ip(const char *interface_name, char *ip_buffer, size_t buffer_size);
+int network_get_interface_ip(const char *interface_name, char *ip_buffer,
+                             size_t buffer_size);
 
 /**
  * @brief Obtiene la dirección MAC de una interfaz
@@ -79,7 +85,8 @@ int network_get_interface_ip(const char *interface_name, char *ip_buffer, size_t
  * @param buffer_size Tamaño del buffer
  * @return 0 en éxito, -1 en error
  */
-int network_get_interface_mac(const char *interface_name, char *mac_buffer, size_t buffer_size);
+int network_get_interface_mac(const char *interface_name, char *mac_buffer,
+                              size_t buffer_size);
 
 #ifdef __cplusplus
 }
