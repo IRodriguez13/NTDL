@@ -6,19 +6,19 @@ int get_cpu_model(char *buffer, size_t size)
     FILE *f = fopen("/proc/cpuinfo", "r");
     if (f == NULL)
     {
-        fprintf(stderr, "No se pudo abrir /proc/cpuinfo\n");   
+        fprintf(stderr, "No se pudo abrir /proc/cpuinfo\n");
         return -1;
     }
 
     char line[256];
     while (fgets(line, sizeof(line), f))
     {
- 
+
         if (strncmp(line, "model name", 10) != 0)
         {
             continue; // Saltar líneas que no sean "model name"
         }
-        
+
         // Si llegamos aquí, encontramos "model name"
         char *colon = strchr(line, ':');
         if (colon)
@@ -88,10 +88,12 @@ double get_cpu_usage()
     }
 
     double cpu_usage = (double)(diffTotal - diffIdle) / diffTotal * 100.0;
-    
+
     // Validar que el resultado esté en rango válido
-    if (cpu_usage < 0.0) cpu_usage = 0.0;
-    if (cpu_usage > 100.0) cpu_usage = 100.0;
-    
+    if (cpu_usage < 0.0)
+        cpu_usage = 0.0;
+    if (cpu_usage > 100.0)
+        cpu_usage = 100.0;
+
     return cpu_usage;
 }
