@@ -13,9 +13,7 @@ int get_cpu_model(char *buffer, size_t size)
     char line[256];
     while (fgets(line, sizeof(line), f))
     {
-        // BUG CORREGIDO: Cambiar la lógica del strncmp
-        // Antes: if(ret == 0) -> esto era incorrecto
-        // Ahora: if(ret != 0) -> saltar si NO es "model name"
+ 
         if (strncmp(line, "model name", 10) != 0)
         {
             continue; // Saltar líneas que no sean "model name"

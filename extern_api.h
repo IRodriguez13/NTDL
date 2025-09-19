@@ -19,6 +19,7 @@ extern "C"
 #endif
 
 #include "metrics.h"
+#include "common/common.h"
 
     /* ============================================================================
      * FUNCIONES DE INICIALIZACIÓN Y LIMPIEZA
@@ -312,6 +313,12 @@ extern "C"
      * @return Número total de sensores
      */
     int sysmon_get_num_sensors(void);
+
+    /**
+     * @brief Obtiene el número total de GPUs
+     * @return Número total de GPUs
+     */
+    int sysmon_get_num_gpus(void);
 
     /* ============================================================================
      * GETTERS PARA INFORMACIÓN DE MOTHERBOARD
