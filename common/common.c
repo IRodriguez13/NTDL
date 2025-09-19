@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "common.h"
 
 void print_cpu_info(const CpuInfo *info)
@@ -62,8 +63,6 @@ CpuInfo *alloc_cpu_info()
     }
 #else
     // En Linux, obtener información básica
-    info->vendor = strdup("Linux CPU"); // Esto está hardcodeado por ahora
-
     // Obtener número de núcleos desde /proc/cpuinfo
     FILE *f = fopen("/proc/cpuinfo", "r");
     if (f)
@@ -76,9 +75,20 @@ CpuInfo *alloc_cpu_info()
             {
                 core_count++;
             }
+            if(strncmp(line, "vendor_id:", 9)== 0)
+            {
+                char *colon = strchr(line, ':');
+                cpu_model[CPU_MODEL_LEN-1] = '\0';
+                if (colon)
+                {
+                    info->vendor = strdup(colon + 2);
+                    break;
+                }
+            }
         }
         fclose(f);
         info->cores = core_count;
+     
     }
     else
     {
@@ -87,8 +97,11 @@ CpuInfo *alloc_cpu_info()
 
     // Obtener frecuencia desde /proc/cpuinfo
     f = fopen("/proc/cpuinfo", "r");
-    if (f)
+    if (!f)
     {
+        fprintf(stderr, "No se pudo abrir /proc/cpuinfo\n");
+        return NULL;
+    }
         char line[256];
         while (fgets(line, sizeof(line), f))
         {
@@ -103,18 +116,17 @@ CpuInfo *alloc_cpu_info()
             }
         }
         fclose(f);
-    }
-    else
-    {
+    
         info->mhz = 0.0;
-    }
+    
 #endif
 
     return info;
     
     cleanup:
-    free(info->vendor);
-    free(info->model);
-    free(info);
+        free(info->vendor);
+        free(info->model);
+        free(info);
+        return NULL;
 }
 
