@@ -1,5 +1,6 @@
 // src/sensors_linux.c
 #include "sensors_linux.h"
+#include "../common/common.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

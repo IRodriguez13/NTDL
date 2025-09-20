@@ -220,11 +220,11 @@ verify: $(TARGET)
 	@file $(TARGET)
 	@if [ "$(UNAME_S)" = "Linux" ]; then \
 		ldd $(TARGET) 2>/dev/null || echo "⚠ ldd no disponible"; \
-		nm -D $(TARGET) | head -15; \
 	fi
 
 clean:
 	rm -f $(OBJS) $(TARGET)
+	find . -name "*.o" -delete 2>/dev/null || true
 	@echo "✅ Archivos compilados eliminados"
 
 clean-python:

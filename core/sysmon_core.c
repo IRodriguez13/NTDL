@@ -22,10 +22,10 @@
 
 // Includes específicos por plataforma
 #ifdef _WIN32
-    #include <windows.h>
+#include <windows.h>
 #else
-    #include <sys/utsname.h>
-    #include <unistd.h>
+#include <sys/utsname.h>
+#include <unistd.h>
 #endif
 
 /* ============================================================================
@@ -44,7 +44,8 @@ static double last_collection_time_ms = 0.0;
  * ============================================================================
  */
 
-static double get_time_ms(void) {
+static double get_time_ms(void)
+{
 #ifdef _WIN32
   LARGE_INTEGER frequency, counter;
   QueryPerformanceFrequency(&frequency);
@@ -57,7 +58,8 @@ static double get_time_ms(void) {
 #endif
 }
 
-static int get_system_load_average(float *load1, float *load5, float *load15) {
+static int get_system_load_average(float *load1, float *load5, float *load15)
+{
 #ifdef _WIN32
   // Windows no tiene load average, usar aproximación con CPU
   *load1 = 0.0f;
@@ -66,7 +68,8 @@ static int get_system_load_average(float *load1, float *load5, float *load15) {
   return 0;
 #elif defined(__APPLE__)
   double loadavg[3];
-  if (getloadavg(loadavg, 3) == -1) {
+  if (getloadavg(loadavg, 3) == -1)
+  {
     return -1;
   }
   *load1 = (float)loadavg[0];
@@ -74,11 +77,14 @@ static int get_system_load_average(float *load1, float *load5, float *load15) {
   *load15 = (float)loadavg[2];
   return 0;
 #else
+
   FILE *f = fopen("/proc/loadavg", "r");
+
   if (!f)
     return -1;
 
-  if (fscanf(f, "%f %f %f", load1, load5, load15) != 3) {
+  if (fscanf(f, "%f %f %f", load1, load5, load15) != 3)
+  {
     fclose(f);
     return -1;
   }
@@ -88,19 +94,23 @@ static int get_system_load_average(float *load1, float *load5, float *load15) {
 #endif
 }
 
-static int get_process_counts(SystemStatus *status) {
+static int get_process_counts(SystemStatus *status)
+{
 #ifdef _WIN32
   // Windows: usar Performance API
   PERFORMANCE_INFORMATION perf_info;
   perf_info.cb = sizeof(PERFORMANCE_INFORMATION);
-  
-  if (GetPerformanceInfo(&perf_info, sizeof(PERFORMANCE_INFORMATION))) {
+
+  if (GetPerformanceInfo(&perf_info, sizeof(PERFORMANCE_INFORMATION)))
+  {
     status->total_processes = perf_info.ProcessCount;
     status->running_processes = perf_info.ProcessCount / 4; // Estimación
     status->sleeping_processes = perf_info.ProcessCount - status->running_processes;
     status->stopped_processes = 0;
     status->zombie_processes = 0;
-  } else {
+  }
+  else
+  {
     // Valores por defecto
     status->total_processes = 100;
     status->running_processes = 10;
@@ -109,25 +119,28 @@ static int get_process_counts(SystemStatus *status) {
     status->zombie_processes = 0;
   }
   return 0;
-  
+
 #elif defined(__APPLE__)
   // macOS: usar sysctl
   int mib[4];
   size_t size;
-  
+
   // Obtener número de procesos
   mib[0] = CTL_KERN;
   mib[1] = KERN_PROC;
   mib[2] = KERN_PROC_ALL;
   mib[3] = 0;
-  
-  if (sysctl(mib, 4, NULL, &size, NULL, 0) == 0) {
+
+  if (sysctl(mib, 4, NULL, &size, NULL, 0) == 0)
+  {
     status->total_processes = size / sizeof(struct kinfo_proc);
     status->running_processes = status->total_processes / 10; // Estimación
     status->sleeping_processes = status->total_processes - status->running_processes;
     status->stopped_processes = 0;
     status->zombie_processes = 0;
-  } else {
+  }
+  else
+  {
     // Valores por defecto
     status->total_processes = 150;
     status->running_processes = 15;
@@ -136,7 +149,7 @@ static int get_process_counts(SystemStatus *status) {
     status->zombie_processes = 0;
   }
   return 0;
-  
+
 #else
   // Linux: usar /proc/stat
   FILE *f = fopen("/proc/stat", "r");
@@ -144,15 +157,19 @@ static int get_process_counts(SystemStatus *status) {
     return -1;
 
   char line[256];
-  while (fgets(line, sizeof(line), f)) {
-    if (strncmp(line, "processes", 9) == 0) {
+  while (fgets(line, sizeof(line), f))
+  {
+    if (strncmp(line, "processes", 9) == 0)
+    {
       // Total de procesos creados (no es lo que queremos)
       continue;
     }
-    if (strncmp(line, "procs_running", 13) == 0) {
+    if (strncmp(line, "procs_running", 13) == 0)
+    {
       sscanf(line, "procs_running %d", &status->running_processes);
     }
-    if (strncmp(line, "procs_blocked", 13) == 0) {
+    if (strncmp(line, "procs_blocked", 13) == 0)
+    {
       sscanf(line, "procs_blocked %d", &status->stopped_processes);
     }
   }
@@ -164,12 +181,15 @@ static int get_process_counts(SystemStatus *status) {
   status->zombie_processes = 0;
 
   FILE *ps = popen("ps -eo stat --no-headers 2>/dev/null", "r");
-  if (ps) {
+  if (ps)
+  {
     char stat[16];
-    while (fscanf(ps, "%15s", stat) == 1) {
+    while (fscanf(ps, "%15s", stat) == 1)
+    {
       status->total_processes++;
 
-      switch (stat[0]) {
+      switch (stat[0])
+      {
       case 'S': // Sleeping
       case 'I': // Idle
         status->sleeping_processes++;
@@ -188,13 +208,15 @@ static int get_process_counts(SystemStatus *status) {
 #endif
 }
 
-static int get_uptime_info(SystemStatus *status) {
+static int get_uptime_info(SystemStatus *status)
+{
   FILE *f = fopen("/proc/uptime", "r");
   if (!f)
     return -1;
 
   double uptime, idle_time;
-  if (fscanf(f, "%lf %lf", &uptime, &idle_time) == 2) {
+  if (fscanf(f, "%lf %lf", &uptime, &idle_time) == 2)
+  {
     status->uptime_seconds = (uint64_t)uptime;
     status->idle_time_seconds = (uint64_t)idle_time;
   }
@@ -208,57 +230,70 @@ static int get_uptime_info(SystemStatus *status) {
  * ============================================================================
  */
 
-int sysmon_core_init(void) {
+int sysmon_core_init(void)
+{
   if (core_initialized)
     return 0;
 
   // Inicializar todos los módulos
-  if (cpu_init() != 0) {
+  if (cpu_init() != 0)
+  {
     fprintf(stderr, "Warning: Failed to initialize CPU module\n");
   }
 
-  if (memory_init() != 0) {
+  if (memory_init() != 0)
+  {
     fprintf(stderr, "Warning: Failed to initialize memory module\n");
   }
 
-  if (gpu_init() != 0) {
+  if (gpu_init() != 0)
+  {
     fprintf(stderr, "Warning: Failed to initialize GPU module\n");
   }
 
-  if (disk_init() != 0) {
+  if (disk_init() != 0)
+  {
     fprintf(stderr, "Warning: Failed to initialize disk module\n");
   }
 
-  if (network_init() != 0) {
+  if (network_init() != 0)
+  {
     fprintf(stderr, "Warning: Failed to initialize network module\n");
   }
 
-  if (sensors_init() != 0) {
+  if (sensors_init() != 0)
+  {
     fprintf(stderr, "Warning: Failed to initialize sensors module\n");
   }
 
-  if (display_init() != 0) {
+  if (display_init() != 0)
+  {
     fprintf(stderr, "Warning: Failed to initialize display module\n");
   }
 
-  if (battery_init() != 0) {
+  if (battery_init() != 0)
+  {
     fprintf(stderr, "Warning: Failed to initialize battery module (normal if "
                     "no battery)\n");
   }
 
-  if (audio_init() != 0) {
+  if (audio_init() != 0)
+  {
     fprintf(stderr, "Warning: Failed to initialize audio module\n");
   }
 
-  if (advanced_sensors_init() != 0) {
+  if (advanced_sensors_init() != 0)
+  {
     fprintf(stderr, "Warning: Failed to initialize advanced sensors module\n");
   }
 
-  if (advanced_memory_init() != 0) {
+  if (advanced_memory_init() != 0)
+  {
     fprintf(stderr, "Warning: Failed to initialize advanced memory module\n");
   }
 
-  if (advanced_network_init() != 0) {
+  if (advanced_network_init() != 0)
+  {
     fprintf(stderr, "Warning: Failed to initialize advanced network module\n");
   }
 
@@ -269,7 +304,8 @@ int sysmon_core_init(void) {
   return 0;
 }
 
-void sysmon_core_cleanup(void) {
+void sysmon_core_cleanup(void)
+{
   if (!core_initialized)
     return;
 
@@ -290,12 +326,15 @@ void sysmon_core_cleanup(void) {
   core_initialized = 0;
 }
 
-int sysmon_core_collect_all_metrics(SystemStatus *status) {
+int sysmon_core_collect_all_metrics(SystemStatus *status)
+{
   if (!status)
     return -1;
 
-  if (!core_initialized) {
-    if (sysmon_core_init() != 0) {
+  if (!core_initialized)
+  {
+    if (sysmon_core_init() != 0)
+    {
       return -1;
     }
   }
@@ -348,7 +387,8 @@ int sysmon_core_collect_all_metrics(SystemStatus *status) {
 
   // Convertir carga a porcentaje (basado en número de núcleos)
   int logical_cores = cpu_get_logical_cores();
-  if (logical_cores > 0) {
+  if (logical_cores > 0)
+  {
     status->load_1min_percent =
         (status->load_average_1min / logical_cores) * 100.0f;
     status->load_5min_percent =
@@ -388,7 +428,8 @@ int sysmon_core_collect_all_metrics(SystemStatus *status) {
   return 0;
 }
 
-int sysmon_core_update_dynamic_metrics(SystemStatus *status) {
+int sysmon_core_update_dynamic_metrics(SystemStatus *status)
+{
   if (!status || !core_initialized)
     return -1;
 
@@ -420,12 +461,14 @@ int sysmon_core_update_dynamic_metrics(SystemStatus *status) {
   return 0;
 }
 
-int sysmon_core_get_system_info(SystemStatus *status) {
+int sysmon_core_get_system_info(SystemStatus *status)
+{
   if (!status)
     return -1;
 
   struct utsname uname_info;
-  if (uname(&uname_info) == 0) {
+  if (uname(&uname_info) == 0)
+  {
     strncpy(status->os_name, uname_info.sysname, sizeof(status->os_name) - 1);
     status->os_name[sizeof(status->os_name) - 1] = '\0';
 
@@ -449,14 +492,16 @@ int sysmon_core_get_system_info(SystemStatus *status) {
   return 0;
 }
 
-int sysmon_core_get_cpu_metrics(SystemStatus *status) {
+int sysmon_core_get_cpu_metrics(SystemStatus *status)
+{
   if (!status)
     return -1;
 
   return cpu_get_metrics(&status->cpu);
 }
 
-int sysmon_core_get_memory_metrics(SystemStatus *status) {
+int sysmon_core_get_memory_metrics(SystemStatus *status)
+{
   if (!status)
     return -1;
 
@@ -466,14 +511,17 @@ int sysmon_core_get_memory_metrics(SystemStatus *status) {
   return (ret1 == 0 && ret2 == 0) ? 0 : -1;
 }
 
-int sysmon_core_get_gpu_metrics(SystemStatus *status) {
+int sysmon_core_get_gpu_metrics(SystemStatus *status)
+{
   if (!status)
     return -1;
 
   status->num_gpus = gpu_get_count();
 
-  for (int i = 0; i < status->num_gpus && i < MAX_GPUS; i++) {
-    if (gpu_get_metrics(i, &status->gpus[i]) != 0) {
+  for (int i = 0; i < status->num_gpus && i < MAX_GPUS; i++)
+  {
+    if (gpu_get_metrics(i, &status->gpus[i]) != 0)
+    {
       status->num_gpus = i; // Ajustar el conteo si hay error
       break;
     }
@@ -482,14 +530,17 @@ int sysmon_core_get_gpu_metrics(SystemStatus *status) {
   return 0;
 }
 
-int sysmon_core_get_disk_metrics(SystemStatus *status) {
+int sysmon_core_get_disk_metrics(SystemStatus *status)
+{
   if (!status)
     return -1;
 
   status->num_disks = disk_get_count();
 
-  for (int i = 0; i < status->num_disks && i < MAX_DISKS; i++) {
-    if (disk_get_info(i, &status->disks[i]) != 0) {
+  for (int i = 0; i < status->num_disks && i < MAX_DISKS; i++)
+  {
+    if (disk_get_info(i, &status->disks[i]) != 0)
+    {
       status->num_disks = i; // Ajustar el conteo si hay error
       break;
     }
@@ -498,15 +549,18 @@ int sysmon_core_get_disk_metrics(SystemStatus *status) {
   return 0;
 }
 
-int sysmon_core_get_network_metrics(SystemStatus *status) {
+int sysmon_core_get_network_metrics(SystemStatus *status)
+{
   if (!status)
     return -1;
 
   status->num_network_interfaces = network_get_interface_count();
 
   for (int i = 0;
-       i < status->num_network_interfaces && i < MAX_NETWORK_INTERFACES; i++) {
-    if (network_get_interface_info(i, &status->network_interfaces[i]) != 0) {
+       i < status->num_network_interfaces && i < MAX_NETWORK_INTERFACES; i++)
+  {
+    if (network_get_interface_info(i, &status->network_interfaces[i]) != 0)
+    {
       status->num_network_interfaces = i; // Ajustar el conteo si hay error
       break;
     }
@@ -515,14 +569,17 @@ int sysmon_core_get_network_metrics(SystemStatus *status) {
   return 0;
 }
 
-int sysmon_core_get_sensor_metrics(SystemStatus *status) {
+int sysmon_core_get_sensor_metrics(SystemStatus *status)
+{
   if (!status)
     return -1;
 
   status->num_sensors = sensors_get_count();
 
-  for (int i = 0; i < status->num_sensors && i < MAX_SENSORS; i++) {
-    if (sensors_get_info(i, &status->sensors[i]) != 0) {
+  for (int i = 0; i < status->num_sensors && i < MAX_SENSORS; i++)
+  {
+    if (sensors_get_info(i, &status->sensors[i]) != 0)
+    {
       status->num_sensors = i; // Ajustar el conteo si hay error
       break;
     }
@@ -531,14 +588,17 @@ int sysmon_core_get_sensor_metrics(SystemStatus *status) {
   return 0;
 }
 
-int sysmon_core_get_display_metrics(SystemStatus *status) {
+int sysmon_core_get_display_metrics(SystemStatus *status)
+{
   if (!status)
     return -1;
 
   status->num_displays = display_get_count();
 
-  for (int i = 0; i < status->num_displays && i < MAX_DISPLAYS; i++) {
-    if (display_get_info(i, &status->displays[i]) != 0) {
+  for (int i = 0; i < status->num_displays && i < MAX_DISPLAYS; i++)
+  {
+    if (display_get_info(i, &status->displays[i]) != 0)
+    {
       status->num_displays = i; // Ajustar el conteo si hay error
       break;
     }
@@ -547,12 +607,14 @@ int sysmon_core_get_display_metrics(SystemStatus *status) {
   return 0;
 }
 
-int sysmon_core_get_battery_metrics(SystemStatus *status) {
+int sysmon_core_get_battery_metrics(SystemStatus *status)
+{
   if (!status)
     return -1;
 
   // Intentar obtener información de batería
-  if (battery_get_info(&status->battery) != 0) {
+  if (battery_get_info(&status->battery) != 0)
+  {
     // No hay batería o error - inicializar con valores por defecto
     memset(&status->battery, 0, sizeof(BatteryInfo));
     status->battery.is_present = 0;
@@ -570,14 +632,17 @@ int sysmon_core_get_battery_metrics(SystemStatus *status) {
   return 0;
 }
 
-int sysmon_core_get_audio_metrics(SystemStatus *status) {
+int sysmon_core_get_audio_metrics(SystemStatus *status)
+{
   if (!status)
     return -1;
 
   status->num_audio_devices = audio_get_device_count();
 
-  for (int i = 0; i < status->num_audio_devices && i < MAX_AUDIO_DEVICES; i++) {
-    if (audio_get_device_info(i, &status->audio_devices[i]) != 0) {
+  for (int i = 0; i < status->num_audio_devices && i < MAX_AUDIO_DEVICES; i++)
+  {
+    if (audio_get_device_info(i, &status->audio_devices[i]) != 0)
+    {
       status->num_audio_devices = i; // Ajustar el conteo si hay error
       break;
     }
@@ -586,7 +651,8 @@ int sysmon_core_get_audio_metrics(SystemStatus *status) {
   return 0;
 }
 
-int sysmon_core_get_advanced_metrics(SystemStatus *status) {
+int sysmon_core_get_advanced_metrics(SystemStatus *status)
+{
   if (!status)
     return -1;
 
@@ -607,12 +673,15 @@ int sysmon_core_is_initialized(void) { return core_initialized; }
 const char *sysmon_core_get_version(void) { return SYSMON_VERSION; }
 
 int sysmon_core_get_performance_stats(double *collection_time_ms,
-                                      uint64_t *total_collections_out) {
-  if (collection_time_ms) {
+                                      uint64_t *total_collections_out)
+{
+  if (collection_time_ms)
+  {
     *collection_time_ms = last_collection_time_ms;
   }
 
-  if (total_collections_out) {
+  if (total_collections_out)
+  {
     *total_collections_out = total_collections;
   }
 
