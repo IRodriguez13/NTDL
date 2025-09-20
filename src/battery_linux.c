@@ -162,14 +162,13 @@ int get_single_battery_info(const char *battery_path, BatteryInfo *info)
         {
             int voltage = 0;
             snprintf(filepath, sizeof(filepath), "%s/voltage_now", battery_path);
-            if (read_int_from_file(filepath, &voltage) == 0)
-            {
-                info->current_capacity_mwh = (temp_value / 1000) * (voltage / 1000000);
-            }
-            else
+            if (read_int_from_file(filepath, &voltage) != 0)
             {
                 info->current_capacity_mwh = -1;
+                return;
             }
+
+            info->current_capacity_mwh = (temp_value / 1000) * (voltage / 1000000);
         }
         else
         {
@@ -235,6 +234,15 @@ int get_single_battery_info(const char *battery_path, BatteryInfo *info)
     return 0;
 }
 
+// Función para liberar memoria de información de batería
+void free_battery_info(BatteryInfo *info)
+{
+    if (info)
+    {
+        free(info);
+    }
+}
+
 // Función principal para obtener información de batería
 BatteryInfo *alloc_battery_info()
 {
@@ -242,6 +250,7 @@ BatteryInfo *alloc_battery_info()
     if (!info)
     {
         Kerror("malloc failed for BatteryInfo");
+        goto clenaup;
         return NULL;
     }
 
@@ -286,17 +295,10 @@ BatteryInfo *alloc_battery_info()
 
     // Si no se encontró información válida de batería
     printf("DEBUG: No se pudo obtener información de batería válida\n");
-    free(info);
     return NULL;
-}
 
-// Función para liberar memoria de información de batería
-void free_battery_info(BatteryInfo *info)
-{
-    if (info)
-    {
-        free(info);
-    }
+clenaup:
+    free(info);
 }
 
 // Función para imprimir información de batería
