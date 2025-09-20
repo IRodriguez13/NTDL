@@ -84,6 +84,7 @@ $(shell mkdir -p $(BUILD_DIR))
 PYTHON = python3
 PYTHON_SCRIPTS_DIR = testing
 PYTHON_TEST = $(PYTHON_SCRIPTS_DIR)/test.py
+PYTHON_TEST_DETAILED = $(PYTHON_SCRIPTS_DIR)/test_detailed_hardware.py
 PYTHON_TEST_ENHANCED = $(PYTHON_SCRIPTS_DIR)/test_enhanced.py
 PYTHON_TEST_LINUX = $(PYTHON_SCRIPTS_DIR)/test_linux.py
 PYTHON_TEST_WINDOWS = $(PYTHON_SCRIPTS_DIR)/test_windows.py
@@ -120,6 +121,15 @@ python-enhanced: $(TARGET)
 		cd $(PYTHON_SCRIPTS_DIR) && $(PYTHON) test_enhanced.py; \
 	else \
 		echo "⚠ test_enhanced.py no encontrado, usando test básico"; \
+		cd $(PYTHON_SCRIPTS_DIR) && $(PYTHON) test.py; \
+	fi
+
+python-detailed: $(TARGET)
+	@echo "=== Ejecutando test detallado de Python ==="
+	@if [ -f "$(PYTHON_TEST_DETAILED)" ]; then \
+		cd $(PYTHON_SCRIPTS_DIR) && $(PYTHON) test_detailed_hardware.py; \
+	else \
+		echo "⚠ test_detailed_hardware.py no encontrado, usando test básico"; \
 		cd $(PYTHON_SCRIPTS_DIR) && $(PYTHON) test.py; \
 	fi
 

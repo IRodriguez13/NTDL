@@ -251,6 +251,7 @@ class DetailedHardwareMonitor:
                                 days = hours // 24
                                 print(f"    {Colors.OKGREEN}Horas de Uso:{Colors.ENDC} {hours} h ({days} días)")
             except:
+                print(f"{Colors.WARNING}⚠ Error leyendo información SMART{Colors.ENDC}")
                 pass
     
     def get_detailed_gpu_info(self):
