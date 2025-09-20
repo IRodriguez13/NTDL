@@ -25,6 +25,7 @@ int detect_nvidia_gpu(GpuInfo *info)
 
     // Obtener información básica de la GPU
     fp = popen("nvidia-smi --query-gpu=name,driver_version,memory.total,memory.used,temperature.gpu,utilization.gpu,clocks.gr,clocks.mem --format=csv,noheader,nounits 2>/dev/null", "r");
+    
     if (!fp)
         return -1;
 
@@ -193,7 +194,8 @@ GpuInfo *alloc_gpu_info()
     GpuInfo *info = (GpuInfo *)malloc(sizeof(GpuInfo));
     if (!info)
     {
-        perror("malloc failed for GpuInfo");
+        Kerror("malloc failed for GpuInfo");
+        goto cleanup;
         return NULL;
     }
 
@@ -231,6 +233,10 @@ GpuInfo *alloc_gpu_info()
     strncpy(info->driver_version, "Unknown", sizeof(info->driver_version) - 1);
 
     return info;
+
+    cleanup:
+        free(info);
+    return NULL;
 }
 
 // Función para liberar memoria de GPU info

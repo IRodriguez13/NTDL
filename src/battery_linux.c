@@ -241,7 +241,7 @@ BatteryInfo *alloc_battery_info()
     BatteryInfo *info = (BatteryInfo *)malloc(sizeof(BatteryInfo));
     if (!info)
     {
-        perror("malloc failed for BatteryInfo");
+        Kerror("malloc failed for BatteryInfo");
         return NULL;
     }
 

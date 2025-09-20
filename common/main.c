@@ -8,7 +8,7 @@ int main()
     CpuInfo *info = alloc_cpu_info();
     if (!info)
     {
-        perror("No se pudo reservar memoria para CpuInfo");
+        Kerror("No se pudo reservar memoria para CpuInfo");
         return 1;
     }
     // Mostramos info
