@@ -107,7 +107,7 @@ TemperatureInfo *alloc_temperature_info()
     TemperatureInfo *info = (TemperatureInfo *)malloc(sizeof(TemperatureInfo));
     if (!info)
     {
-        perror("malloc failed for TemperatureInfo");
+        Kerror("malloc failed for TemperatureInfo");
         return NULL;
     }
 

@@ -210,7 +210,7 @@ NetworkInfo *alloc_network_info()
     NetworkInfo *info = (NetworkInfo *)malloc(sizeof(NetworkInfo));
     if (!info)
     {
-        perror("malloc failed for NetworkInfo");
+        Kerror("malloc failed for NetworkInfo");
         return NULL;
     }
 

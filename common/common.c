@@ -16,29 +16,33 @@ void print_cpu_info(const CpuInfo *info)
 
 void free_cpu_info(CpuInfo *info)
 {
-    if (info == NULL) return;
-    
-    if (info->vendor) {
+    if (info == NULL)
+        return;
+
+    if (info->vendor)
+    {
         free(info->vendor);
         info->vendor = NULL;
     }
-    
-    if (info->model) {
+
+    if (info->model)
+    {
         free(info->model);
         info->model = NULL;
     }
-    
+
     free(info);
 }
 
 CpuInfo *alloc_cpu_info()
 {
     CpuInfo *info = (CpuInfo *)malloc(sizeof(CpuInfo));
-    
+
     if (info == NULL)
     {
         Kerror("malloc failed for CpuInfo");
-        return NULL;    
+        goto cleanup;
+        return NULL;
     }
 
     // Inicializar estructura
@@ -58,7 +62,7 @@ CpuInfo *alloc_cpu_info()
     {
         info->model = strdup("Unknown CPU Model");
     }
-    
+
     if (info->model == NULL)
     {
         fprintf(stderr, "Error: strdup failed for model\n");
@@ -81,10 +85,10 @@ CpuInfo *alloc_cpu_info()
             fprintf(stderr, "Error: strdup failed for vendor\n");
             goto cleanup;
         }
-        
+
         info->cores = cores;
         info->mhz = frequency;
-        
+
         // Si el modelo de Windows es mejor, usarlo
         if (strlen(model_win) > strlen(info->model))
         {
@@ -110,7 +114,7 @@ CpuInfo *alloc_cpu_info()
     {
         char line[256];
         int core_count = 0;
-        
+
         while (fgets(line, sizeof(line), f))
         {
             // Contar procesadores (núcleos lógicos)
@@ -118,7 +122,7 @@ CpuInfo *alloc_cpu_info()
             {
                 core_count++;
             }
-            
+
             // Obtener vendor_id
             if (strncmp(line, "vendor_id", 9) == 0)
             {
@@ -126,19 +130,20 @@ CpuInfo *alloc_cpu_info()
                 if (colon)
                 {
                     colon += 2; // Saltar ": "
-                    
+
                     // Limpiar espacios y salto de línea
                     char *vendor_str = colon;
                     char *newline = strchr(vendor_str, '\n');
-                    if (newline) *newline = '\0';
-                    
+                    if (newline)
+                        *newline = '\0';
+
                     // Limpiar espacios al final
                     int len = strlen(vendor_str);
-                    while (len > 0 && vendor_str[len-1] == ' ')
+                    while (len > 0 && vendor_str[len - 1] == ' ')
                     {
                         vendor_str[--len] = '\0';
                     }
-                    
+
                     info->vendor = strdup(vendor_str);
                     if (info->vendor == NULL)
                     {
@@ -146,7 +151,7 @@ CpuInfo *alloc_cpu_info()
                     }
                 }
             }
-            
+
             // Obtener frecuencia de CPU
             if (strncmp(line, "cpu MHz", 7) == 0)
             {
@@ -158,7 +163,7 @@ CpuInfo *alloc_cpu_info()
             }
         }
         fclose(f);
-        
+
         info->cores = core_count;
     }
     else
@@ -168,7 +173,7 @@ CpuInfo *alloc_cpu_info()
         info->cores = 0;
         info->mhz = 0.0;
     }
-    
+
     // Si no pudimos obtener vendor, usar valor por defecto
     if (info->vendor == NULL)
     {
@@ -177,12 +182,14 @@ CpuInfo *alloc_cpu_info()
 #endif
 
     return info;
-    
+
 cleanup:
     if (info)
     {
-        if (info->vendor) free(info->vendor);
-        if (info->model) free(info->model);
+        if (info->vendor)
+            free(info->vendor);
+        if (info->model)
+            free(info->model);
         free(info);
     }
     return NULL;
