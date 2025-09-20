@@ -912,13 +912,4 @@ chmod +x libsysmon.dylib
 
 GPL v3 - Ver [LICENSE](LICENSE) para detalles.
 
-## 🙏 **AGRADECIMIENTOS**
-
-- **Linux**: Comunidad del kernel y desarrolladores de hwmon
-- **Windows**: Microsoft por las APIs WMI y Performance Counters  
-- **macOS**: Apple por IOKit y Core frameworks
-- **Comunidad Open Source**: Por las herramientas y librerías utilizadas
-
----
-
-**SysMon** - Una librería, tres plataformas, infinitas posibilidades. 🚀
+**SysMon** - 
