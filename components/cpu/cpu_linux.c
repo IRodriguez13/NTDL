@@ -7,6 +7,7 @@
 #include "../../common/common.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
 #include <glob.h>
@@ -529,14 +530,16 @@ int cpu_get_logical_cores(void)
 {
     FILE *f = fopen("/proc/cpuinfo", "r");
     if (!f)
+    {
         return -1;
+    }
 
     char line[256];
     int logical_cores = 0;
 
     while (fgets(line, sizeof(line), f))
     {
-        if (strncmp(line, "processor", 9) == 0)
+        if (strncmp(line, "processor", 9) == true)
         {
             logical_cores++;
         }

@@ -49,9 +49,11 @@ static float read_hwmon_sensor(const char *pattern, const char *sensor_type)
                     globfree(&glob_result);
                     return value / 1000.0f; // Convertir de mili-unidades
                 }
+        
                 fclose(f);
             }
         }
+
         globfree(&glob_result);
     }
 
@@ -79,9 +81,11 @@ static int read_hwmon_fan(const char *pattern)
                     globfree(&glob_result);
                     return value; // RPM directo
                 }
+        
                 fclose(f);
             }
         }
+        
         globfree(&glob_result);
     }
 
@@ -263,6 +267,7 @@ int advanced_memory_get_info(MemoryAdvancedInfo *memory_info)
                 }
             }
         }
+        
         pclose(fp);
     }
 

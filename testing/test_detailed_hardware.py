@@ -369,7 +369,7 @@ class DetailedHardwareMonitor:
 
 def main():
     print(f"{Colors.HEADER}{Colors.BOLD}{'='*70}{Colors.ENDC}")
-    print(f"{Colors.HEADER}{Colors.BOLD}{'MONITOR DETALLADO DE HARDWARE - ESTILO CRYSTALDISKINFO':^70}{Colors.ENDC}")
+    print(f"{Colors.HEADER}{Colors.BOLD}{'MONITOR DETALLADO DE HARDWARE':^70}{Colors.ENDC}")
     print(f"{Colors.HEADER}{Colors.BOLD}{'='*70}{Colors.ENDC}")
     
     monitor = DetailedHardwareMonitor()

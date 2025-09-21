@@ -96,16 +96,16 @@ all: $(TARGET)
 compile-lib: $(TARGET)
 
 $(TARGET): $(OBJS)
-	@echo "🔗 Enlazando librería para $(PLATFORM)..."
+	@echo "\nEnlazando librería para $(PLATFORM)..."
 	$(CC) $(CFLAGS) $(SHARED_FLAG) -o $@ $(OBJS) $(LDFLAGS) $(PLATFORM_LIBS)
-	@echo "✅ Librería $(TARGET) compilada exitosamente para $(PLATFORM)"
-	@echo "📋 Verificando símbolos exportados:"
+	@echo "\n[OK]Librería $(TARGET) compilada exitosamente para $(PLATFORM)"
+	@echo "\nVerificando símbolos exportados:\n"
 	@if [ "$(PLATFORM)" = "linux" ]; then \
 		nm -D $(TARGET) | grep -E "(sysmon_init|sysmon_get_cpu|sysmon_collect)" | head -5 || echo "⚠ Verificación de símbolos omitida"; \
 	fi
-	@echo "📁 Copiando librería al directorio de testing..."
+	@echo "\n Copiando librería al directorio de testing..."
 	@cp $(TARGET) $(TESTING_DIR)/
-
+	@echo "\n[OK]Librería copiada al directorio de testing\n"
 # regla implícita para .c -> .o
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<

@@ -48,23 +48,28 @@ static int parse_meminfo(DetailedRamInfo *ram_info, SwapInfo *swap_info)
             {
                 ram_info->total_kb = value;
             }
-            else if (sscanf(line, "MemFree: %lu kB", &value) == 1)
+            
+            if (sscanf(line, "MemFree: %lu kB", &value) == 1)
             {
                 ram_info->free_kb = value;
             }
-            else if (sscanf(line, "MemAvailable: %lu kB", &value) == 1)
+            
+            if (sscanf(line, "MemAvailable: %lu kB", &value) == 1)
             {
                 ram_info->available_kb = value;
             }
-            else if (sscanf(line, "Cached: %lu kB", &value) == 1)
+            
+            if (sscanf(line, "Cached: %lu kB", &value) == 1)
             {
                 ram_info->cached_kb = value;
             }
-            else if (sscanf(line, "Buffers: %lu kB", &value) == 1)
+            
+            if (sscanf(line, "Buffers: %lu kB", &value) == 1)
             {
                 ram_info->buffers_kb = value;
             }
-            else if (sscanf(line, "Shmem: %lu kB", &value) == 1)
+
+            if (sscanf(line, "Shmem: %lu kB", &value) == 1)
             {
                 ram_info->shared_kb = value;
             }
