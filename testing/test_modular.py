@@ -12,7 +12,7 @@ import os
 from ctypes import POINTER, Structure, c_char, c_char_p, c_int, c_double, c_float, c_uint64, c_uint32
 
 # Configurar LD_LIBRARY_PATH si es necesario
-os.environ['LD_LIBRARY_PATH'] = '.'
+os.environ['libsysmon.so'] = '.'
 
 # ==================== CONFIGURACIÓN Y CONSTANTES ====================
 MAX_STRING_LEN = 256

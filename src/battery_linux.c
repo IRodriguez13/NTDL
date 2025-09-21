@@ -7,6 +7,7 @@
 #include <glob.h>
 #include <dirent.h>
 
+
 // Función para leer un valor entero desde un archivo
 int read_int_from_file(const char *filepath, int *value)
 {
@@ -134,20 +135,20 @@ int get_single_battery_info(const char *battery_path, BatteryInfo *info)
         {
             int voltage = 0;
             snprintf(filepath, sizeof(filepath), "%s/voltage_now", battery_path);
-            if (read_int_from_file(filepath, &voltage) == 0)
-            {
-                info->full_charge_capacity_mwh = (temp_value / 1000) * (voltage / 1000000);
-            }
-            else
+            if (read_int_from_file(filepath, &voltage) != 0)
             {
                 info->full_charge_capacity_mwh = -1;
             }
+            
+            info->full_charge_capacity_mwh = (temp_value / 1000) * (voltage / 1000000);
+            
         }
         else
         {
             info->full_charge_capacity_mwh = -1;
         }
     }
+            
 
     // Obtener capacidad actual
     snprintf(filepath, sizeof(filepath), "%s/energy_now", battery_path);
@@ -299,6 +300,7 @@ BatteryInfo *alloc_battery_info()
 
 clenaup:
     free(info);
+
 }
 
 // Función para imprimir información de batería
@@ -395,3 +397,4 @@ void print_battery_info(const BatteryInfo *info)
 
     printf("======================\n");
 }
+

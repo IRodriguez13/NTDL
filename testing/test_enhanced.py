@@ -461,7 +461,5 @@ def main():
     print(f"   {Colors.OKGREEN}✅ Biblioteca C: {'Cargada' if sysmon.library_loaded else 'No disponible'}{Colors.ENDC}")
     
     print(f"\n{Colors.HEADER}{Colors.BOLD}🎉 Test completado exitosamente{Colors.ENDC}")
-    print(f"{Colors.OKCYAN}Esta interfaz puede ser usada por tu compañero en su capa de aplicación{Colors.ENDC}")
-
 if __name__ == "__main__":
     main()
