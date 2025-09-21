@@ -17,7 +17,6 @@ int main()
     // Liberamos memoria
     free_cpu_info(info);
 
-    // ================= DISK INFO =================
 
     return 0;
 }

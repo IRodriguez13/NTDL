@@ -130,6 +130,7 @@ static int read_sensor_label(const char *base_path, const char *sensor_file, cha
             fclose(f);
             return 0;
         }
+
         fclose(f);
     }
 
@@ -189,24 +190,26 @@ static int scan_hwmon_sensors(void)
             if (hwmon_name)
             {
                 hwmon_name++; // Saltar '/'
-                char temp_name[64];
-                int ret = snprintf(sensor->name, sizeof(temp_name), "%s/%s", hwmon_name, sensor->label);
-                if (ret >= (int)sizeof(sensor->name))
-                {
-                    snprintf(temp_name, sizeof(temp_name), "%s/%s", hwmon_name, sensor->label);
-                    
-                    // overlapping en el sensor
 
-                    int ret = snprintf(sensor->name, sizeof(temp_name), "%s/%s", hwmon_name, temp_name);
-                    if (ret >= (int)sizeof(sensor->name))
-                    {
-                        snprintf(sensor->name, sizeof(sensor->name), "%s", temp_name);
-                    }
+                // Buffer temporal para construir el nombre
+                char temp_full_name[128];
+                int ret = snprintf(temp_full_name, sizeof(temp_full_name), "%s/%s", hwmon_name, sensor->label);
+                if (ret >= (int)sizeof(temp_full_name))
+                {
+                    // Truncamiento: copiar solo lo que quepa
+                    strncpy(temp_full_name, hwmon_name, sizeof(temp_full_name) - 1);
+                    temp_full_name[sizeof(temp_full_name) - 1] = '\0';
                 }
+
+                // Ahora copiar el resultado temporal a sensor->name
+                strncpy(sensor->name, temp_full_name, sizeof(sensor->name) - 1);
+                sensor->name[sizeof(sensor->name) - 1] = '\0';
             }
             else
             {
-                snprintf(sensor->name, sizeof(sensor->name), "%s", sensor->label);
+                // CORRECCIÓN: Usar strncpy en lugar de strcpy
+                strncpy(sensor->name, sensor->label, sizeof(sensor->name) - 1);
+                sensor->name[sizeof(sensor->name) - 1] = '\0';
             }
 
             // Intentar leer valores min/max/critical si existen
@@ -277,14 +280,15 @@ static int scan_thermal_zone_sensors(void)
         if (temp_pos)
         {
             *temp_pos = '\0';
-            char *zone_name = strrchr(zone_path, '/');
-            if (zone_name)
-            {
-                zone_name++; // Saltar '/'
-                snprintf(sensor->name, sizeof(sensor->name), "thermal/%s", zone_name);
-                strncpy(sensor->label, zone_name, sizeof(sensor->label) - 1);
-            }
         }
+        char *zone_name = strrchr(zone_path, '/');
+        if (zone_name)
+        {
+            zone_name++; // Saltar '/'
+            snprintf(sensor->name, sizeof(sensor->name), "thermal/%s", zone_name);
+            strncpy(sensor->label, zone_name, sizeof(sensor->label) - 1);
+        }
+
         free(zone_path);
 
         sensor->type = SENSOR_TYPE_TEMPERATURE;
@@ -297,6 +301,7 @@ static int scan_thermal_zone_sensors(void)
     }
 
     globfree(&glob_result);
+
     return 0;
 }
 

@@ -29,6 +29,7 @@ static int network_initialized = 0;
 
 static float read_hwmon_sensor(const char *pattern, const char *sensor_type)
 {
+    (void)sensor_type;
     glob_t glob_result;
     char search_pattern[512];
 
