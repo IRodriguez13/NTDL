@@ -10,8 +10,7 @@
  * Compatible con: Linux, Windows, macOS (XNU)
  */
 
-#ifndef EXTERN_API_H
-#define EXTERN_API_H
+#pragma once
 
 #ifdef __cplusplus
 extern "C"
@@ -476,4 +475,3 @@ extern "C"
 }
 #endif
 
-#endif /* EXTERN_API_H */

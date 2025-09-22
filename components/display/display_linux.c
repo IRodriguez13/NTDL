@@ -3,8 +3,8 @@
  * @brief Implementación de pantallas para Linux
  */
 
-#include "display_interface.h"
 #include "../../common/common.h"
+#include "display_interface.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -108,8 +108,7 @@ static int scan_x11_displays(void)
                         XRRModeInfo *mode = &screen_resources->modes[j];
                         if (mode->hTotal && mode->vTotal)
                         {
-                            display->refresh_rate_hz = (float)mode->dotClock /
-                                                       (mode->hTotal * mode->vTotal);
+                            display->refresh_rate_hz = (float)mode->dotClock / (mode->hTotal * mode->vTotal);
                         }
                         break;
                     }

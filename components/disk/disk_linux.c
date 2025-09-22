@@ -31,8 +31,8 @@ static DiskInfo detected_disks[MAX_DISKS];
 
 static int get_disk_smart_via_smartctl(const char *device, DiskInfo *info)
 {
-    char cmd[512];
     FILE *fp;
+    char cmd[512];
     char line[256];
 
     // Verificar si SMART está disponible

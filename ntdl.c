@@ -1,9 +1,9 @@
 /**
- * @file extern_api.c
+ * @file ntdl.c
  * @brief Implementación de la API Externa de SysMon
  */
 
-#include "extern_api.h"
+#include "ntdl.h"
 #include "core/sysmon_core.h"
 #include "components/cpu/cpu_interface.h"
 #include "components/gpu/gpu_interface.h"

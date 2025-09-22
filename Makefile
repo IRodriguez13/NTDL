@@ -9,7 +9,7 @@ BUILD_DIR = build
 TESTING_DIR = testing
 
 # Código fuente común
-SRC_COMMON = common/common.c core/sysmon_core.c extern_api.c
+SRC_COMMON = common/common.c core/sysmon_core.c ntdl.c
 
 # Código específico por plataforma
 SRC_LINUX = components/cpu/cpu_linux.c \
