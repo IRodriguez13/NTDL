@@ -273,8 +273,7 @@ int sysmon_core_init(void)
 
   if (battery_init() != 0)
   {
-    fprintf(stderr, "Warning: Failed to initialize battery module (normal if "
-                    "no battery)\n");
+    fprintf(stderr, "Warning: Failed to initialize battery module (normal if no battery)\n");
   }
 
   if (audio_init() != 0)

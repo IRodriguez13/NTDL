@@ -20,17 +20,17 @@
 
 ```c
 // El mismo código funciona en Linux, Windows y macOS
-#include "extern_api.h"
+#include "ntdl.h"
 
-int main() {
+int main() 
+{
     sysmon_init();
     
     float cpu_usage = sysmon_get_cpu_usage_percent();    // Funciona en todas
     float ram_usage = sysmon_get_ram_usage_percent();    // APIs nativas
     float cpu_temp = sysmon_get_cpu_temperature();       // por plataforma
     
-    printf("CPU: %.1f%%, RAM: %.1f%%, Temp: %.1f°C\n", 
-           cpu_usage, ram_usage, cpu_temp);
+    printf("CPU: %.1f%%, RAM: %.1f%%, Temp: %.1f°C\n", cpu_usage, ram_usage, cpu_temp);
     
     sysmon_cleanup();
     return 0;
