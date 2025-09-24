@@ -32,7 +32,6 @@ int main()
     
     printf("CPU: %.1f%%, RAM: %.1f%%, Temp: %.1f°C\n", cpu_usage, ram_usage, cpu_temp);
     
-    sysmon_cleanup();
     return 0;
 }
 ```

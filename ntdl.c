@@ -21,19 +21,22 @@
 
 static SystemStatus g_system_status;
 static int g_status_valid = 0;
-// Error buffer removed - using direct error strings instead
 
 /* ============================================================================
  * FUNCIONES DE INICIALIZACIÓN Y LIMPIEZA
  * ============================================================================ */
 
+
 int sysmon_init(void)
 {
     int result = sysmon_core_init();
-    if (result == 0)
+    if (result != 0)
     {
         g_status_valid = 0; // Invalidar datos previos
+        sysmon_cleanup();
     }
+
+    sysmon_cleanup();
     return result;
 }
 

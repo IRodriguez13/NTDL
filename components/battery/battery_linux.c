@@ -157,11 +157,7 @@ int battery_get_info(BatteryInfo *battery_info)
     if (read_battery_file_string("status", status, sizeof(status)) == 0)
     {
         battery_info->is_charging = (strcmp(status, "Charging") == 0) ? 1 : 0;
-        battery_info->is_plugged = (strcmp(status, "Not charging") == 0 ||
-                                    strcmp(status, "Charging") == 0 ||
-                                    strcmp(status, "Full") == 0)
-                                       ? 1
-                                       : 0;
+        battery_info->is_plugged = (strcmp(status, "Not charging") == 0 || strcmp(status, "Charging") == 0 || strcmp(status, "Full") == 0) ? 1 : 0;
     }
 
     // Voltaje

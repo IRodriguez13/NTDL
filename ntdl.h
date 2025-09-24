@@ -1,8 +1,8 @@
 /**
- * @file extern_api.h
+ * @file ntdl.h
  * @brief API Externa Final de la Biblioteca SysMon
  * @version 1.0.0
- * @date 2024
+ * @date 2025
  *
  * Esta es la API pública final para consumir métricas del sistema
  * desde aplicaciones externas usando ctypes, cffi u otras bibliotecas FFI.
