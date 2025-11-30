@@ -28,10 +28,7 @@
 #include <unistd.h>
 #endif
 
-/* ============================================================================
- * CONSTANTES Y VARIABLES GLOBALES
- * ============================================================================
- */
+
 
 #define SYSMON_VERSION "1.0.0"
 
@@ -39,10 +36,6 @@ static int core_initialized = 0;
 static uint64_t total_collections = 0;
 static double last_collection_time_ms = 0.0;
 
-/* ============================================================================
- * FUNCIONES AUXILIARES
- * ============================================================================
- */
 
 static double get_time_ms(void)
 {
@@ -111,12 +104,7 @@ static int get_process_counts(SystemStatus *status)
   }
   else
   {
-    // Valores por defecto
-    status->total_processes = 100;
-    status->running_processes = 10;
-    status->sleeping_processes = 90;
-    status->stopped_processes = 0;
-    status->zombie_processes = 0;
+    printf("There no values allowed.\n");
   }
   return 0;
 
@@ -141,12 +129,7 @@ static int get_process_counts(SystemStatus *status)
   }
   else
   {
-    // Valores por defecto
-    status->total_processes = 150;
-    status->running_processes = 15;
-    status->sleeping_processes = 135;
-    status->stopped_processes = 0;
-    status->zombie_processes = 0;
+    printf("There no values allowed.\n");
   }
   return 0;
 
@@ -224,11 +207,6 @@ static int get_uptime_info(SystemStatus *status)
   fclose(f);
   return 0;
 }
-
-/* ============================================================================
- * IMPLEMENTACIÓN DE LA INTERFAZ
- * ============================================================================
- */
 
 int sysmon_core_init(void)
 {

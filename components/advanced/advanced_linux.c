@@ -15,17 +15,11 @@
 #include <arpa/inet.h>
 #include <ifaddrs.h>
 
-/* ============================================================================
- * VARIABLES ESTÁTICAS
- * ============================================================================ */
 
 static int sensors_initialized = 0;
 static int memory_initialized = 0;
 static int network_initialized = 0;
 
-/* ============================================================================
- * IMPLEMENTACIÓN DE SENSORES AVANZADOS
- * ============================================================================ */
 
 static float read_hwmon_sensor(const char *pattern, const char *sensor_type)
 {
@@ -158,10 +152,6 @@ int advanced_sensors_get_info(AdvancedSensorsInfo *sensors_info)
     return 0;
 }
 
-/* ============================================================================
- * IMPLEMENTACIÓN DE MEMORIA AVANZADA
- * ============================================================================ */
-
 int advanced_memory_init(void)
 {
     if (memory_initialized)
@@ -241,9 +231,8 @@ int advanced_memory_get_info(MemoryAdvancedInfo *memory_info)
                 {
                     char *speed_str = strstr(line, ":");
                     if (speed_str)
-                    {
                         sscanf(speed_str + 1, " %d MHz", &memory_info->memory_speed_mhz);
-                    }
+                    
                 }
 
                 // Fabricante
@@ -251,9 +240,7 @@ int advanced_memory_get_info(MemoryAdvancedInfo *memory_info)
                 {
                     char *mfg_str = strstr(line, ":");
                     if (mfg_str)
-                    {
                         sscanf(mfg_str + 1, " %63s", memory_info->slot_manufacturer[current_slot]);
-                    }
                 }
 
                 // Número de parte
@@ -261,9 +248,7 @@ int advanced_memory_get_info(MemoryAdvancedInfo *memory_info)
                 {
                     char *part_str = strstr(line, ":");
                     if (part_str)
-                    {
                         sscanf(part_str + 1, " %255s", memory_info->slot_part_number[current_slot]);
-                    }
                 }
             }
         }
@@ -292,10 +277,6 @@ int advanced_memory_get_info(MemoryAdvancedInfo *memory_info)
     return 0;
 }
 
-/* ============================================================================
- * IMPLEMENTACIÓN DE RED AVANZADA
- * ============================================================================ */
-
 int advanced_network_init(void)
 {
     if (network_initialized)
@@ -315,9 +296,7 @@ int advanced_network_get_info(NetworkAdvancedInfo *network_info)
         return -1;
 
     if (!network_initialized && advanced_network_init() != 0)
-    {
         return -1;
-    }
 
     memset(network_info, 0, sizeof(NetworkAdvancedInfo));
 
